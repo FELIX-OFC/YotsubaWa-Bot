@@ -13,7 +13,7 @@ export const handler = async (m, { conn, args, text }) => {
     }
 
     // Aviso al usuario que se está procesando la solicitud
-    await conn.reply(m.chat, '🌟 Enviando tu solicitud a *CLAUDE.* Por favor espera...', m, rcanal);
+    await conn.reply(m.chat, '🌟 Enviando tu solicitud a *GEMINI.* Por favor espera...', m, rcanal);
 
     // Intentamos enviar la petición POST con JSON { prompt: input }
     // (La forma exacta de la API no estaba documentada; este formato es genérico)
@@ -52,15 +52,15 @@ export const handler = async (m, { conn, args, text }) => {
 
     // También (opcional) puedes enviar un mensaje privado al autor con la respuesta,
     // ejemplo de uso parecido a otros handlers previos:
-    // await conn.sendMessage(m.sender, { text: `*👑 CLAUDE 👑*\n\n${aiResponse}` }, { quoted: m });
+    // await conn.sendMessage(m.sender, { text: `*👑 GEMINI 👑*\n\n${aiResponse}` }, { quoted: m });
 
   } catch (error) {
-    await conn.reply(m.chat, `🌟 Error al procesar la solicitud de la IA: ${error.message}`, m);
+    await conn.reply(m.chat, `🌟 Error al procesar la solicitud de la IA: ${error.message}`, m, rcanal);
   }
 };
 
-handler.help = ['aiclaude <texto>'];
+handler.help = ['ia <texto>'];
 handler.tags = ['ia', 'ai'];
-handler.command = ['aiclaude', 'IA', 'claudeia'];
+handler.command = ['ia', 'ai'];
 handler.group = true;
 export default handler;
