@@ -1,7 +1,6 @@
 //* Código Creado por Félix*
 //*No quites Los Créditos*
 
-
 const handler = async (m, { isOwner, isAdmin, conn, participants, args, usedPrefix }) => {
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
   if (!(isAdmin || isOwner)) {
@@ -11,7 +10,7 @@ const handler = async (m, { isOwner, isAdmin, conn, participants, args, usedPref
 
   const pesan = args.join(' ');
   const invocador = m.pushName || 'Administrador';
-  const pp = 'https://qu.ax/gScos.jpg'; // Imagen para el comando 
+  const pp = 'https://qu.ax/yntnG.jpg'; // Imagen para el comando 
 
   let teks = `╭─╮⊹︹︹⊹︹︹⊹╭─╮
   𝗜𝗡𝗩𝗢𝗖𝗔𝗡𝗗𝗢 𝗚𝗥𝗨𝗣𝗢
