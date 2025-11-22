@@ -16,13 +16,13 @@ const handler = async (m, { isOwner, isAdmin, conn, participants, args, usedPref
   𝗜𝗡𝗩𝗢𝗖𝗔𝗡𝗗𝗢 𝗚𝗥𝗨𝗣𝗢
 ╚▬ִ▭࣪▬ִ▭࣪▬ִ▭࣪▬ִ▭࣪▬ִ▭╝
 
-💫 Te invocó: ${invocador}
+❄ Te invocó: ${invocador}
 
-👑 Mensaje: ${pesan ? pesan : ''}
+☃️ Mensaje: ${pesan ? pesan : ''}
 
 ╭─⬣「 ✰𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀✰ 」⬣\n`;
   for (const mem of participants) {
-    teks += `│⁖ฺ۟̇࣪·֗٬̤⃟🌟 @${mem.id.split('@')[0]}\n`;
+    teks += `│⁖ฺ۟̇࣪·֗٬̤⃟🎁 @${mem.id.split('@')[0]}\n`;
   }
   teks += '╰─⬣';
 
