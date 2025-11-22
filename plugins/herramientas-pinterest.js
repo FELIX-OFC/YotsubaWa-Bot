@@ -3,7 +3,7 @@ import baileys from '@whiskeysockets/baileys'
 import cheerio from 'cheerio'
 
 let handler = async (m, { conn, text, args, usedPrefix }) => {
-if (!text) return m.reply(`*ᐛ👑* ¿Dime que imagen de pinterest quieres que dubuje?`)
+if (!text) return m.reply(`*ᐛ☃️* ¿Dime que imagen de pinterest quieres que dubuje?`)
 try {
 await m.react('🕒')
 if (text.includes("https://")) {
@@ -13,11 +13,11 @@ await conn.sendMessage(m.chat, { [isVideo ? "video" : "image"]: { url: i.downloa
 } else {
 const results = await pins(text)
 if (!results.length) {
-return conn.reply(m.chat, `*ᐛ👑* No tengo la capacidad paea dibujar lo que pediste`, m, rcanal)
+return conn.reply(m.chat, `*ᐛ❄* No tengo la capacidad paea dibujar lo que pediste`, m, rcanal)
 }
 const medias = results.slice(0, 10).map(img => ({ type: 'image', data: { url: img.image_large_url } }))
 await conn.sendSylphy(m.chat, medias, {
-caption: `*ᐛ👑* Pude hacer ${medias.length} de ${text}`, quoted: m })
+caption: `*ᐛ☃️* Pude hacer ${medias.length} de ${text}`, quoted: m })
 await m.react('💟')
 }} catch (e) {
 await m.react('✖️')
