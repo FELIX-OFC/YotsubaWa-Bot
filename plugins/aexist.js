@@ -11,8 +11,18 @@ export async function before(m, { groupMetadata }) {
     'setcurrency',
     'setmoneda',
     'inspect',
-    'ia',
-    'ai', // Comandos de IA 
+    'ai', 
+    'bard',
+    'chatgpt',
+    'dalle',
+    'flux',
+    'gemini',
+    'ia', 
+    'iavoz',
+    'luminai',
+    'openai',
+    'yotsuba',
+    'yotsuba-nakano-ia', // Comandos de IA 
   ]
 
   const validCommand = (command, plugins) => {
