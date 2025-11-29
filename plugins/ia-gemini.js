@@ -1,50 +1,38 @@
-let handler = async (m, { conn, args, command }) => {
-  let texto = args.join(' ');
+import axios from 'axios';
+
+const handler = async (m, { args }) => {
+  const texto = args.join(' ').trim();
+
+  // Si no hay texto, advierte y reacciona con ❌
   if (!texto) {
-    // Reacciona con ❌ si no hay texto
-    if (conn.sendMessage) {
-      await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key }});
-    }
-    // Mensaje de advertencia usando contexto rcanal
-    return await conn.sendMessage(m.chat, { text: '*👑 Ingresa un texto para hablar con la IA.*' }, m, rcanal);
+    if (m?.react) await m.react('❌');
+    return m.reply('*⚠️ Por favor escribe un texto después del comando. Ejemplo:\n#ia ¿Cómo está el clima hoy?*');
   }
 
-  // Reacciona con 🕰️ al recibir texto
-  if (conn.sendMessage) {
-    await conn.sendMessage(m.chat, { react: { text: '⏰', key: m.key }});
-  }
+  // Reacciona con ⏰ mientras espera respuesta de la API
+  if (m?.react) await m.react('⏰');
 
   try {
-    let url = `https://api-adonix.ultraplus.click/ai/gemini?apikey=AdonixKeyd6ne2h9555&text=${encodeURIComponent(texto)}`
-    let res = await fetch(url);
-    let json = await res.json();
-    let respuesta = json.result || null;
+    const url = `https://api-adonix.ultraplus.click/ai/gemini?apikey=AdonixKeyd6ne2h9555&text=${encodeURIComponent(texto)}`;
+    const res = await axios.get(url);
 
-    // Reacciona con 🤖 cuando la respuesta está lista
-    if (conn.sendMessage) {
-      await conn.sendMessage(m.chat, { react: { text: '🤖', key: m.key }});
-    }
+    // Reacciona con 🤖 cuando ya tiene respuesta
+    if (m?.react) await m.react('🤖');
 
+    const respuesta = res.data?.result;
     if (!respuesta) {
-      // Reacciona con ❌ si no hay respuesta
-      if (conn.sendMessage) {
-        await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key }});
-      }
-      return await conn.sendMessage(m.chat, { text: '❗ Ocurrió un error al conectar con la IA.' }, { quoted: m });
+      if (m?.react) await m.react('❌');
+      return m.reply('*❗ Ocurrió un error al conectar con la IA.*');
     }
-
-    await conn.sendMessage(m.chat, { text: respuesta }, { quoted: m });
+    m.reply(respuesta);
   } catch (e) {
-    // Reacciona con ❌ ante error
-    if (conn.sendMessage) {
-      await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key }});
-    }
-    await conn.sendMessage(m.chat, { text: '❗ Ocurrió un error al conectar con la IA.' }, { quoted: m });
+    if (m?.react) await m.react('❌');
+    m.reply('*❗ Ocurrió un error al conectar con la IA.*');
   }
 }
 
-handler.help = ['ia <texto>', 'ai <texto>']
-handler.tags = ['ai', 'chatbot']
-handler.command = /^(ia|ai)$/i
+handler.help = ['ia <texto>', 'ai <texto>'];
+handler.tags = ['ai', 'chatbot'];
+handler.command = /^(ia|ai)$/i;
 
-export default handler
+export default handler;
