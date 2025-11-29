@@ -5,10 +5,10 @@ const handler = async (m, { args }) => {
   const enlace = args[0]?.trim();
 
   if (!enlace) {
-    return m.reply('👑 Debes escribir el enlace del canal de WhatsApp.');
+    return m.reply('*👑 Debes escribir el enlace del canal de WhatsApp.*');
   }
   if (!/^https:\/\/whatsapp\.com\/channel\//.test(enlace)) {
-    return m.reply('❌ Solo se permiten enlaces de canales de WhatsApp.');
+    return m.reply('*😐 Solo se permiten enlaces de canales de WhatsApp.*');
   }
 
   // Datos de APIs
@@ -34,14 +34,13 @@ const handler = async (m, { args }) => {
 
   const info = await getInfo();
   if (!info || !info.result) {
-    return m.reply('❌ Ocurrió un error al obtener la información del canal.');
+    return m.reply('*😔 Ocurrió un error al obtener la información del canal.*');
   }
 
   const canal = info.result;
   let msg = `🌐 *Información del Canal de WhatsApp*\n\n`;
   if (canal.preview) msg += `🖼️ Imagen: ${canal.preview}\n`;
   msg += `📄 *Nombre:* ${canal.name}\n`;
-  msg += `👤 *Creador:* ${info.creator ?? 'Desconocido'}\n`;
   msg += `🟢 *Estado:* ${canal.state}\n`;
   if (canal.description) msg += `📝 *Descripción:*\n${canal.description}\n`;
   msg += `👥 *Suscriptores:* ${canal.subscribers}\n`;
