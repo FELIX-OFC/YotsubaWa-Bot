@@ -45,10 +45,10 @@ export async function before(m, { groupMetadata, conn }) {
     // Si es 'menu' + algo no existente
     if (/^menu/i.test(command)) {
       if (!extraCategories.includes(command)) {
-        return conn.reply(m.chat, `👑 La categoría *${command}*\nno fue encontrada en mi base.\nPara ver mi lista de categorías usa *#help*`, m)
+        return conn.reply(m.chat, `👑 La categoría *${command}*\nno fue encontrada en mi base de datos.`, m, rcanal)
       }
     }
     // Cualquier otro comando no existente
-    return conn.reply(m.chat, `👑 El comando *${command}*\nno fue encontrado en mi base.\nPara ver mi lista de comandos usa *#help*`, m)
+    return conn.reply(m.chat, `👑 El comando *${command}*\nno fue encontrado en mi base.\nPara ver mi lista de comandos usa *#help*`, m, rcanal)
   }
 }
