@@ -2,7 +2,7 @@ const mapImages = {
   kalahari: 'https://files.catbox.moe/3sf8cz.jpg',      // Kalahari (original intacta)
   alpes:    'https://files.catbox.moe/b09zpc.jpg',      // Alpes
   bermuda:  'https://files.catbox.moe/3c5xp3.jpg',      // Bermuda
-  purgatorio:'https://files.catbox.moe/u87o1o.jpg'      // Purgatorio
+  purgatorio:'https://files.catbox.moe/3c5xp3.jpg'      // Purgatorio
 }
 
 const mapNames = {
