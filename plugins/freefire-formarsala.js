@@ -2,10 +2,6 @@ function user(a) {
   return '@' + a.split('@')[0]
 }
 
-function pickRandom(list) {
-  return list[Math.floor(Math.random() * list.length)]
-}
-
 function getRandomUnique(list, n) {
   // Devuelve n elementos únicos al azar de una lista
   const listCopy = [...list]
@@ -17,7 +13,7 @@ function getRandomUnique(list, n) {
   return result
 }
 
-const handler = async (m, { groupMetadata, args, command, conn, text, usedPrefix }) => {
+const handler = async (m, { groupMetadata, args, conn }) => {
   const entrada = args.join(' ').trim()
   if (!entrada) return conn.reply(m.chat, '🌛 Usa el formato: #formarsala <VS|Clanes/Países>\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m)
 
@@ -29,14 +25,16 @@ const handler = async (m, { groupMetadata, args, command, conn, text, usedPrefix
 
   const numA = parseInt(vsMatch[1])
   const numB = parseInt(vsMatch[2])
+  const total = numA + numB
+  const totalNecesarios = total + 2 // Sumando suplentes
 
   // IDs de los usuarios del grupo
-  let ps = groupMetadata.participants.map(v => v.id)
+  let ps = groupMetadata?.participants?.map(v => v.id) || []
+  if (ps.length < totalNecesarios) {
+    return conn.reply(m.chat, `👑 Se necesitan ${totalNecesarios} para formar la sala.`, m)
+  }
 
-  // Total requeridos: equipoA + equipoB + 2 suplentes
-  const totalNecesarios = numA + numB + 2
-
-  // Selecciona usuarios sin repetir
+  // Selecciona usuarios aleatorios, sin repetir
   const randomUsers = getRandomUnique(ps, totalNecesarios)
   const equipoA = randomUsers.slice(0, numA)
   const equipoB = randomUsers.slice(numA, numA + numB)
@@ -47,7 +45,6 @@ const handler = async (m, { groupMetadata, args, command, conn, text, usedPrefix
   msg += `👑 *Equipo 2:*\n${equipoB.map(u => `- ${user(u)}`).join('\n')}\n\n`
   msg += `- Suplentes:\n${suplentes.map(u => `- ${user(u)}`).join('\n')}`
 
-  // Menciona a todos los seleccionados
   conn.reply(m.chat, msg, m, { mentions: randomUsers })
 }
 
@@ -55,5 +52,6 @@ handler.help = ['formarsala <vs|clanes/países>']
 handler.command = ['formarsala']
 handler.tags = ['group']
 handler.group = true
+handler.register = true
 
 export default handler
