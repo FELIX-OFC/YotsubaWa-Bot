@@ -3,7 +3,6 @@ function user(a) {
 }
 
 function getRandomUnique(list, n) {
-  // Devuelve n elementos únicos al azar de una lista
   const listCopy = [...list]
   const result = []
   while (result.length < n && listCopy.length > 0) {
@@ -15,26 +14,24 @@ function getRandomUnique(list, n) {
 
 const handler = async (m, { groupMetadata, args, conn }) => {
   const entrada = args.join(' ').trim()
-  if (!entrada) return conn.reply(m.chat, '🌛 Usa el formato: #formarsala <VS|Clanes/Países>\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m)
+  if (!entrada) return conn.reply(m.chat, '🌛 Usa el formato: #formarsala <VS|Clanes/Países>\nEjemplo: #formarsala 2v2|ColombiavsMexico', m, rcanal)
 
   const [vsRaw, gruposRaw] = entrada.split('|').map(v => v?.trim())
-  if (!vsRaw || !gruposRaw) return conn.reply(m.chat, '🌛 Escribe ambos parámetros: VS|Clanes/Países.\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m, rcanal)
+  if (!vsRaw || !gruposRaw) return conn.reply(m.chat, '🌛 Escribe ambos parámetros: VS|Clanes/Países.\nEjemplo: #formarsala 2v2|ColombiavsMexico', m, rcanal)
 
-  const vsMatch = vsRaw.match(/^(\d+)\s*vs\s*(\d+)$/i)
-  if (!vsMatch) return conn.reply(m.chat, '🌛 El primer parámetro debe ser formato NºvsNº, ejemplo: 5vs5', m, rcanal)
+  // Aquí se admite 1vs1, 2v2, v o vs minúsculas/mayúsculas (tanto "v" como "vs")
+  const vsMatch = vsRaw.match(/^(\d+)\s*[vV][sS]?\s*(\d+)$/)
+  if (!vsMatch) return conn.reply(m.chat, '🌛 El primer parámetro debe ser formato NºvNº o NºvsNº, ejemplo: 2v2, 1vs1, 5vs5', m, rcanal)
 
   const numA = parseInt(vsMatch[1])
   const numB = parseInt(vsMatch[2])
-  const total = numA + numB
-  const totalNecesarios = total + 2 // Sumando suplentes
+  const totalNecesarios = numA + numB + 2
 
-  // IDs de los usuarios del grupo
   let ps = groupMetadata?.participants?.map(v => v.id) || []
   if (ps.length < totalNecesarios) {
-    return conn.reply(m.chat, `👑 Se necesitan ${totalNecesarios} usuarios en el grupo para formar la sala.`, m, rcanal)
+    return conn.reply(m.chat, `👑 Se necesitan ${totalNecesarios} para formar la sala.`, m, rcanal)
   }
 
-  // Selecciona usuarios aleatorios, sin repetir
   const randomUsers = getRandomUnique(ps, totalNecesarios)
   const equipoA = randomUsers.slice(0, numA)
   const equipoB = randomUsers.slice(numA, numA + numB)
