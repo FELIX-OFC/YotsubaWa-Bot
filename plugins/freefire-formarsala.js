@@ -18,10 +18,10 @@ const handler = async (m, { groupMetadata, args, conn }) => {
   if (!entrada) return conn.reply(m.chat, '🌛 Usa el formato: #formarsala <VS|Clanes/Países>\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m)
 
   const [vsRaw, gruposRaw] = entrada.split('|').map(v => v?.trim())
-  if (!vsRaw || !gruposRaw) return conn.reply(m.chat, '🌛 Escribe ambos parámetros: VS|Clanes/Países.\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m)
+  if (!vsRaw || !gruposRaw) return conn.reply(m.chat, '🌛 Escribe ambos parámetros: VS|Clanes/Países.\nEjemplo: #formarsala 5vs5|ColombiavsMexico', m, rcanal)
 
   const vsMatch = vsRaw.match(/^(\d+)\s*vs\s*(\d+)$/i)
-  if (!vsMatch) return conn.reply(m.chat, '🌛 El primer parámetro debe ser formato NºvsNº, ejemplo: 5vs5', m)
+  if (!vsMatch) return conn.reply(m.chat, '🌛 El primer parámetro debe ser formato NºvsNº, ejemplo: 5vs5', m, rcanal)
 
   const numA = parseInt(vsMatch[1])
   const numB = parseInt(vsMatch[2])
@@ -31,7 +31,7 @@ const handler = async (m, { groupMetadata, args, conn }) => {
   // IDs de los usuarios del grupo
   let ps = groupMetadata?.participants?.map(v => v.id) || []
   if (ps.length < totalNecesarios) {
-    return conn.reply(m.chat, `👑 Se necesitan ${totalNecesarios} para formar la sala.`, m)
+    return conn.reply(m.chat, `👑 Se necesitan ${totalNecesarios} usuarios en el grupo para formar la sala.`, m, rcanal)
   }
 
   // Selecciona usuarios aleatorios, sin repetir
