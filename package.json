@@ -1,7 +1,7 @@
 {
-"name": "YukiBot-MD",
+"name": "Yotsuba Nakano-IA",
 "version": "1.8.2",
-"description": "WhatsApp Bot Multi Device",
+"description": "Bot de whatsapp desarrollado por github copilot",
 "main": "index.js",
 "type": "module",
 "directories": {
@@ -13,14 +13,14 @@
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/The-King-Destroy/YukiBot-MD.git"
+"url": "git+https://github.com/sungs-dev/sungs-dev.git"
 },  
-"author": "The-King-Destroy",
+"author": "Felix ofc",
 "license": "MIT-License",
 "bugs": {
-"url": "https://github.com/The-King-Destroy/YukiBot-MD/issues"
+"url": "https://github.com/sungs-dev/sungs-dev/issues"
 },
-"homepage": "https://github.com/The-King-Destroy/YukiBot-MD#readme",
+"homepage": "https://github.com/sungs-dev/sungs-dev#readme",
 "dependencies": {
 "@hapi/boom": "^10.0.1",
 "@vitalets/google-translate-api": "^8.0.0",
