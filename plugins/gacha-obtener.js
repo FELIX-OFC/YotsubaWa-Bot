@@ -61,5 +61,5 @@ const handler = async (m, { conn }) => {
 
 handler.command = ['c', 'obtener']
 handler.help = ['c', 'obtener']
-handler.tags = ['game']
+handler.tags = ['gacha']
 export default handler
