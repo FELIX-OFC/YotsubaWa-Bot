@@ -1,3 +1,7 @@
+/* Código criado por Félix ofc 
+Por favor, respeite os créditos ou faça uma doação :D
+*/
+
 import fs from 'fs'
 
 const RW_COOLDOWN = 5 * 60 * 1000 // 5 minutos en ms
