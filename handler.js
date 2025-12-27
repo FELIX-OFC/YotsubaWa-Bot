@@ -1,3 +1,8 @@
+/*
+Código de yukiBot-MD
+Dejen los créditos de ese hermoso bot
+https://github.com/YukiBot-MD
+*/
 import { smsg } from "./lib/simple.js"
 import { format } from "util"
 import { fileURLToPath } from "url"
