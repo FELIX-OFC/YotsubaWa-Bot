@@ -1,4 +1,9 @@
-import { search, download } from 'aptoide-scraper'
+
+/*
+Código de yukiBot-MD
+Dejen los créditos de ese hermoso bot
+https://github.com/YukiBot-MD
+*/import { search, download } from 'aptoide-scraper'
 
 var handler = async (m, { conn, usedPrefix, command, text }) => {
 if (!text) return conn.reply(m.chat, `👑 Ingresa el nombre de la aplicación que deseas instalar.`, m, rcanal)
