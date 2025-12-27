@@ -55,6 +55,5 @@ handler.help = ['formarsala <vs|clanes/países>']
 handler.command = ['formarsala']
 handler.tags = ['group']
 handler.group = true
-handler.register = true
 
 export default handler
