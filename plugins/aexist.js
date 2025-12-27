@@ -1,3 +1,9 @@
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 export async function before(m, { groupMetadata, conn }) {
   if (!m.text || !global.prefix.test(m.text)) return
   const usedPrefix = global.prefix.exec(m.text)[0]
