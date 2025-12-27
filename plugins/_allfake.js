@@ -1,3 +1,8 @@
+/*
+Código de yukiBot-MD
+Dejen los créditos de ese hermoso bot
+https://github.com/YukiBot-MD
+*/
 import pkg from '@whiskeysockets/baileys'
 import fs from 'fs'
 import fetch from 'node-fetch'
