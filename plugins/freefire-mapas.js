@@ -1,3 +1,9 @@
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 const mapImages = {
   kalahari: 'https://files.catbox.moe/3sf8cz.jpg',      // Kalahari (original intacta)
   alpes:    'https://files.catbox.moe/u87o1o.jpg',      // Alpes
