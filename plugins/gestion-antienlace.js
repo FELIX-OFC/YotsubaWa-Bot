@@ -1,3 +1,9 @@
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 // REGEX para detectar enlaces (http(s), www, .com, .net, .org, .gg, etc.)
 const linkRegex = /(https?:\/\/\S+|www\.\S+|\b[\w\d\-.]+\.(com|net|org|gg|me|xyz|info|io|edu|gov|biz|dev|shop|live|tv|site|online|app|club|link|store|media|cloud|fun|pro|vip|icu|space|top|studio|center|agency|name|today|solutions|website|social|group|chat|capital|cool|company|news|press|network|world|help|works|plus|run|systems|zone|tools|tube|team|one|page|games|design|direct|center|events|market|partners|school|services|show|support|technology|tips|trade|ventures|wiki|works|click|email|expert|global|life|money|photo|pics|rocks|tech|web|xyz|io|ai|co|in|to|us|uk|ca|au|de|fr|es|it|jp|ru|br|za|nl|se|no|fi|dk|pl|gr|cz|sk|tr|ro|hu|lt|lv|ee|bg|hr|si|rs|ua|by|md|az|ge|am|kz|kg|uz|tm|tj|mn|kr|cn|tw|hk|mo|vn|th|my|sg|ph|id|lk|bd|np|pk|af|ir|iq|sy|jo|lb|il|ps|eg|ma|dz|tn|ly|sd|et|ss|so|dj|er|ke|tz|ug|rw|bi|mw|zm|zm|mg|zw|ao|cm|cv|cf|td|ne|ng|sn|gm|gw|mr|ml|bf|sl|lr|ci|gh|tg|bj|ng|za|mz|sw|na|bw|ls|sz|km|sc|mu|yt|re|pm|bl|mf|gp|mq|gf|sr|cw|aw|sx|bq|vg|ai|ms|bm|tc|ky|jm|bs|bb|lc|vc|gd|dm|ag|kn|vi|pr|do|ht|cu|bs|us|ca|mx|gt|bz|sv|hn|ni|cr|pa|co|ec|pe|bo|py|uy|ar|cl|br|gy|sr|gf|fk)\b)/gi
 
