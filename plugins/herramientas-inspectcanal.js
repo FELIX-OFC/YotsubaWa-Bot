@@ -1,3 +1,9 @@
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 import axios from 'axios';
 
 const handler = async (m, { args }) => {
