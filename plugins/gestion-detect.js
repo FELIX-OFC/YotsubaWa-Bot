@@ -1,3 +1,9 @@
+/* 
+🌛 Code modified by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 let WAMessageStubType = (await import('@whiskeysockets/baileys')).default
 import chalk from 'chalk'
 import fs from 'fs'
