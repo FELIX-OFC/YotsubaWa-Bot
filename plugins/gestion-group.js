@@ -1,3 +1,9 @@
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
+
 let handler = async (m, { conn, usedPrefix, command }) => {
 let isClose = { 'open': 'not_announcement', 'abrir': 'not_announcement', 'close': 'announcement', 'cerrar': 'announcement', }[command]
 await conn.groupSettingUpdate(m.chat, isClose)
