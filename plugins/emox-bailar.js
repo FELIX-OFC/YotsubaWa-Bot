@@ -1,3 +1,10 @@
+/*
+Código de yukiBot-MD
+Dejen los créditos de ese hermoso bot
+https://github.com/YukiBot-MD
+Todos los comandos de emox son de este bot
+*/
+
 import fs from 'fs';
 import path from 'path';
 
