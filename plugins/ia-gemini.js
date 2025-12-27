@@ -1,3 +1,9 @@
+/*
+Código de yukiBot-MD
+Dejen los créditos de ese hermoso bot
+https://github.com/YukiBot-MD
+*/
+
 import FormData from "form-data"
 import { fileTypeFromBuffer } from "file-type"
 import axios from "axios"
