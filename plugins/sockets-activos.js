@@ -1,79 +1,111 @@
-// Código creado por Félix ofc 
-// Respeta créditos
+import fs from 'fs';
+import path from 'path';
+import ws from 'ws';
+import { fileURLToPath } from 'url';
 
-import ws from 'ws'
-import { join } from 'path'
-import fs from 'fs'
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
-const readSessionName = (jid) => {
-  try {
-    const number = jid.split('@')[0]?.replace(/\D/g, '')
-    if (!number) return null
-    const configPath = join('./JadiBots', number, 'config.json')
-    if (!fs.existsSync(configPath)) return null
-    const cfg = JSON.parse(fs.readFileSync(configPath))
-    return cfg?.name || null
-  } catch (e) {
-    return null
-  }
-}
+export default {
+  command: ['bots', 'sockets'],
+  category: 'socket',
+  run: async (client, m) => {
+    const botId = client.user.id.split(':')[0] + '@s.whatsapp.net'
+    const bot = global.db.data.settings[botId]
+    const botname = bot.namebot
+    const botname2 = bot.namebot2
+    const banner = bot.icon
+    const from = m.key.remoteJid
+    const groupMetadata = m.isGroup ? await client.groupMetadata(from).catch(() => {}) : ''
+    const groupParticipants = groupMetadata?.participants?.map((p) => p.phoneNumber || p.jid || p.lid || p.id) || []
 
-let handler = async (m, { conn }) => {
-  const mainBotConn = global.conn
-  if (!global.conns || !Array.isArray(global.conns)) global.conns = []
-  global.conns = global.conns.filter(subConn => {
-    return subConn.user?.jid && subConn.ws?.socket?.readyState === ws.OPEN
-  })
+    const mainBotJid = global.client.user.id.split(':')[0] + '@s.whatsapp.net'
+    const isMainBotInGroup = groupParticipants.includes(mainBotJid)
 
-  let totalSubs = global.conns.length
-  const totalPrincipales = 1
-  const totalBots = totalPrincipales + totalSubs
-  const sesiones = totalBots.toLocaleString()
+    const basePath = path.join(dirname, '../../Sessions')
+    const folders = {
+      Subs: 'Subs',
+      Mods: 'Mods',
+      Prems: 'Prems',
+    }
 
-  let botsEnGrupo = 0
-  let botsEnGrupoDetalles = []
+    const getBotsFromFolder = (folderName) => {
+      const folderPath = path.join(basePath, folderName)
+      if (!fs.existsSync(folderPath)) return []
+      return fs
+        .readdirSync(folderPath)
+        .filter((dir) => {
+          const credsPath = path.join(folderPath, dir, 'creds.json')
+          return fs.existsSync(credsPath)
+        })
+        .map((id) => id.replace(/\D/g, '')) // Normaliza a solo números
+    }
 
-  // Obtener nombre principal (del bot que envía)
-  const mainJid = mainBotConn.user?.jid || conn.user?.jid
-  let mainName = readSessionName(mainJid) || mainBotConn.user?.name || 'Yotsuba Nakano'
+    const subs = getBotsFromFolder(folders.Subs)
+    const mods = getBotsFromFolder(folders.Mods)
+    const prems = getBotsFromFolder(folders.Prems)
 
-  if (mainBotConn.chats && mainBotConn.chats[m.chat]) {
-    botsEnGrupo++
-    botsEnGrupoDetalles.push({
-      jid: mainBotConn.user.jid,
-      tipo: 'Principal'
+    const categorizedBots = { Owner: [], Mod: [], Premium: [], Sub: [] }
+    const mentionedJid = []
+
+    const formatBot = (number, label) => {
+      const jid = number + '@s.whatsapp.net'
+      if (!groupParticipants.includes(jid)) return null
+      mentionedJid.push(jid)
+      const data = global.db.data.settings[jid]
+      const name = data?.namebot2 || 'Bot'
+      const handle = `@${number}`
+      return `- [${label} *${name}*] › ${handle}`
+    }
+
+    if (global.db.data.settings[mainBotJid]) {
+      const name = global.db.data.settings[mainBotJid].namebot2
+      const handle = `@${mainBotJid.split('@')[0]}`
+      if (isMainBotInGroup) {
+        mentionedJid.push(mainBotJid)
+        categorizedBots.Owner.push(`- [Owner *${name}*] › ${handle}`)
+      }
+    }
+
+    /*mods.forEach((num) => {
+      const line = formatBot(num, 'Main')
+      if (line) categorizedBots.Mod.push(line)
     })
-  }
 
-  for (let subConn of global.conns) {
-    if (subConn.chats && subConn.chats[m.chat]) {
-      botsEnGrupo++
-      botsEnGrupoDetalles.push({
-        jid: subConn.user.jid,
-        tipo: 'Sub'
-      })
+    prems.forEach((num) => {
+      const line = formatBot(num, 'Premium')
+      if (line) categorizedBots.Premium.push(line)
+    })*/
+
+    subs.forEach((num) => {
+      const line = formatBot(num, 'Sub')
+      if (line) categorizedBots.Sub.push(line)
+    })
+
+    const totalCounts = {
+      Owner: global.db.data.settings[mainBotJid] ? 1 : 0,
+    //  Mod: mods.length,
+    //  Premium: prems.length,
+      Sub: subs.length,
     }
-  }
 
-  let txt = `𑁍⃪࣭۪ٜ݊݊݊݊݊໑ٜ࣪ Lista de bots activos (*${sesiones}* sesiones)\n\n❖ Principales » *${totalPrincipales}*\n✰ Subs » *${totalSubs}*\n\n`
-  txt += `❏ En este grupo: *${botsEnGrupo}*\n\n`
+    const totalBots = totalCounts.Owner + totalCounts.Sub
+    const totalInGroup =
+      categorizedBots.Owner.length +
+      categorizedBots.Sub.length
 
-  if (botsEnGrupo > 0) {
-    for (let b of botsEnGrupoDetalles) {
-      const numero = b.jid.split('@')[0]
-      // Obtener nombre de la sesión específica; si no existe, mostrar el nombre principal
-      const nombreSesion = readSessionName(b.jid) || mainName
-      txt += `\t\t*✎ [${b.tipo} • ${nombreSesion}]* » @${numero}\n`
+    let message = `ꕥ Números de Sockets activos *(${totalBots})*\n\n`
+    message += `ੈ❖‧₊˚ Principales › *${totalCounts.Owner}*\n`
+  //  message += `ੈ✰︎︎‧₊˚ Premiums › *${totalCounts.Premium}*\n`
+    message += `ੈ✿‧₊˚ Subs › *${totalCounts.Sub}*\n\n`
+    message += `➭ *Bots en el grupo ›* ${totalInGroup}\n`
+
+    for (const category of ['Owner', 'Sub']) {
+      if (categorizedBots[category].length) {
+        message += categorizedBots[category].join('\n') + '\n'
+      }
     }
-  } else {
-    txt += '\t\t🜸 Ningún bot principal/sub en este grupo\n'
-  }
 
-  const mentions = botsEnGrupoDetalles.map(b => b.jid)
-
-  await conn.sendMessage(m.chat, { text: txt, mentions }, { quoted: m })
-}
-
-handler.command = ['sockets', 'bots']
-handler.group = true
-export default handler
+    await client.sendContextInfoIndex(m.chat, message, {}, m, true, mentionedJid)
+  },
+};
