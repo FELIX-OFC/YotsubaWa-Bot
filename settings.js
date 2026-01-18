@@ -18,12 +18,6 @@ global.ch = {
 ch1: "120363421036863665@newsletter"
 }
 
-global.owner = [
-"573235915041",
-"18094374392",
-"18293527611"
-]
-
 global.APIs = {
 xyro: { url: "https://xyro.site", key: null },
 yupra: { url: "https://api.yupra.my.id", key: null },
@@ -32,6 +26,12 @@ delirius: { url: "https://api.delirius.store", key: null },
 zenzxz: { url: "https://api.zenzxz.my.id", key: null },
 siputzx: { url: "https://api.siputzx.my.id", key: null }
 }
+
+global.owner = [
+"573235915041",
+"18094374392",
+"18293527611"
+]
 
 global.botname = "Yotsuba Nakano"
 global.textbot = "𝓓𝓮𝓿𝓮𝓵𝓸𝓹𝓮𝓭 𝓫𝔂 𝗗𝙚𝙮𝙢𝙤𝙤𝙣𝗢𝙛𝙘 ❤️"
