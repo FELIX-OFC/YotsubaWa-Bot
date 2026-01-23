@@ -1,53 +1,36 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'fs'
+import path from 'path'
 
 let handler = async (m, { conn, usedPrefix }) => {
-    let who;
+    let who = m.mentionedJid.length > 0 ? m.mentionedJid[0] : (m.quoted ? m.quoted.sender : null)
+    let name = who ? (await conn.getName(who)) || who.replace('@s.whatsapp.net', '') : null
+    let name2 = m.pushName || (await conn.getName(m.sender)) || m.sender.split('@')[0]
 
-    if (m.mentionedJid.length > 0) {
-        who = m.mentionedJid[0];
-    } else if (m.quoted) {
-        who = m.quoted.sender;
-    } else {
-        who = m.sender;
-    }
-
-    let name = conn.getName(who);
-    let name2 = conn.getName(m.sender);
-    m.react('🗡️');
-
-    let str;
-    if (m.mentionedJid.length > 0) {
-        str = `\`${name2}\` *mato a* \`${name || who}\` *( ⚆ _ ⚆ )*.`;
-    } else if (m.quoted) {
-        str = `\`${name2}\` *mato a* \`${name || who}\`.`;
-    } else {
-        str = `\`${name2}\` *se mató a sí mismo ( ⚆ _ ⚆ ).*`.trim();
-    }
+    let str = who
+        ? `👑 \`${name2}\` Asesinó a \`${name}\` en el duelo ⚔️` 
+        : `👑 \`${name2}\` desapareció dramáticamente 💫`
 
     if (m.isGroup) {
-        let pp = 'https://qu.ax/GQLO.mp4';
-        let pp2 = 'https://qu.ax/bzFY.mp4';
-        let pp3 = 'https://qu.ax/OQFE.mp4';
-        let pp4 = 'https://qu.ax/GQLO.mp4';
-        let pp5 = 'https://qu.ax/GssX.mp4';
-        let pp6 = 'https://qu.ax/NeQYU.mp4';
-        let pp7 = 'https://qu.ax/ypqXb.mp4';
-        let pp8 = 'https://qu.ax/rxME.mp4';
-        let pp9 = 'https://qu.ax/mNLhE.mp4';
-        let pp10 = 'https://qu.ax/WVjPF.mp4';
+        let pp = 'https://media.tenor.com/jrnH6CdNne0AAAPo/2s.mp4'
+        let pp2 = 'https://media.tenor.com/NbBCakbfZnkAAAPo/die-kill.mp4'
+        let pp3 = 'https://media.tenor.com/SIrXZQWK9WAAAAPo/me-friends.mp4'
+        let pp4 = 'https://media.tenor.com/Ay1Nm0X2VP8AAAPo/falling-from-window-anime-death.mp4'
+        let pp5 = 'https://media.tenor.com/rblZGXCYSmAAAAPo/akame.mp4'
+        let pp6 = 'https://media.tenor.com/dtXcyLvxLLkAAAPo/akame.mp4'
+        let pp7 = 'https://media.tenor.com/WakyzIJP0t0AAAPo/angels-of-death-anime-boy-bandage.mp4'
+        let pp8 = 'https://media.tenor.com/wa_191SsAEwAAAPo/nana-anime.mp4'
 
-        const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10];
-        const video = videos[Math.floor(Math.random() * videos.length)];
 
-        let mentions = [who];
-        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, mentions }, { quoted: m });
+        const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8]
+        const video = videos[Math.floor(Math.random() * videos.length)]
+
+        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, ptt: true, mentions: who ? [who] : [] }, { quoted: m })
     }
 }
 
-handler.help = ['kill/matar @tag'];
-handler.tags = ['anime'];
-handler.command = ['kill','matar'];
-handler.group = true;
-
-export default handler;
+handler.help = ['kill']
+handler.tags = ['anime']
+handler.command = ['kill', 'matar', 'muere']
+handler.group = true
+handler.register = true;
+export default handler
