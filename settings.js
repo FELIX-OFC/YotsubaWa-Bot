@@ -29,6 +29,7 @@ siputzx: { url: "https://api.siputzx.my.id", key: null }
 
 global.owner = [
 "573235915041",
+"573107400303",
 "18094374392",
 "18293527611"
 ]
