@@ -1,8 +1,8 @@
 <div align="center">
 
-# 💚 YOTSUBA NAKANO CHANNEL 💚
+# 💚 YOTSUBA NAKANO BOT 💚
 
-![Yotsuba Nakano Banner](https://i.imgur.com/yk8yZ1B.jpg)
+![Yotsuba Nakano Banner](https://www.hdwallpapers.in/download/yotsuba_nakano_hd_the_quintessential_quintuplets-2560x1440.jpg)
 
 [![Bot Status](https://img.shields.io/badge/-SIMPLE--WHATSAPP--BOT-green?colorA=%21ff0000&colorB=%21017e40&style=for-the-badge)](https://github.com/FELIX-OFC)  
 [![Desarrollador](https://img.shields.io/badge/Desarrollador-FELIX--OFC-orange?style=for-the-badge&logo=github)](https://github.com/FELIX-OFC)  
@@ -14,8 +14,8 @@
 
 <div align="center">
 
-### ⚠️ AVISO IMPORTANTE ⚠️
-**ESTE BOT FUNCIONA LOCALMENTE** — NO usa servicios de hosting externos oficiales.  
+### ⚠️ AVISO IMPORTANTE ⚠️  
+**Este proyecto corre localmente (Termux / VPS). No depende de servicios de hosting externos.**
 
 </div>
 
@@ -23,58 +23,74 @@
 
 ## ✨ Sobre Yotsuba Nakano Bot
 
-Yotsuba Nakano Bot trae la energía, ternura y estilo de Yotsuba directamente a WhatsApp.  
-Automatiza chats, gestiona grupos y agrega diversión a tu experiencia con comandos estilo anime y mini-juegos.
+Yotsuba Nakano Bot es un asistente para WhatsApp con personalidad alegre y estilo kawaii inspirado en Yotsuba: gestiona grupos, envía saludos, crea stickers y ofrece mini-juegos. Modular, personalizable y pensado para ejecutarse en Termux o en un servidor.
+
+---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" width="60" height="60">
 
-  ## ✅ Características
+  ## ✅ Características principales
 </div>
 
 | Estado | Funcionalidad |
 |:------:|:------------|
-| ✅ | Comandos estilo anime y saludos kawaii |
-| ✅ | Gestión de grupos (mensajes de bienvenida, menciones, etc.) |
-| ✅ | Soporte para GIFs, MP4 y stickers |
-| ✅ | Sub-bots (JadiBot) para tareas automáticas |
-| ✅ | Protección anti-spam, anti-enlaces y mensajes no deseados |
-| ✅ | Juegos RPG simples y entretenimiento en chat |
-| ✅ | Descarga de música y videos desde URLs de YouTube |
-| 🔜 | ¡Nuevas funciones agregadas periódicamente! |
+| ✅ | Comandos sociales (saludos, menús, respuestas kawaii) |
+| ✅ | Gestión de grupos (bienvenida, menciones, moderación) |
+| ✅ | Envío de GIFs/MP4 y stickers |
+| ✅ | Plugins modulares y Sub-Bots (JadiBots) |
+| ✅ | Protección anti-spam y anti-enlace |
+| ✅ | Mini-juegos y sistema RPG básico |
+| ✅ | Descargas de música y videos desde URLs |
+| 🔜 | Nuevas características periódicas |
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" width="60" height="60">
 
-  ## 📱 Conéctate con Nosotros
+  ## 📱 Conéctate / Soporte
 </div>
 
-Si tienes preguntas o problemas con el bot, contáctanos:  
-
-- Canal oficial de novedades: [WhatsApp Channel](https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A)  
-- Comunidad / Grupo oficial: [Únete aquí](https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW)  
-- Soporte / Owner: **+57 310 7400303**  
-
-[![Contacto WhatsApp](https://img.shields.io/badge/Soporte_WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/573107400303)
+- 🔔 **Canal oficial (anuncios):** https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A  
+- 👥 **Comunidad / Grupo:** https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW  
+- 📞 **Soporte / Owner:** **+57 310 7400303**  
+- ✉️ **Editor / Contacto técnico:** makiharukawa.bot@gmail.com
 
 ---
 
-<div align="center">
-  <img src="https://static.wikia.nocookie.net/nyancat/images/d/d3/Nyan-cat.gif/revision/latest/scale-to-width-down/400?cb=20131231222500&path-prefix=es" width="80" height="50">
+## 📦 Requisitos
 
-  ## 👥 Comunidad
-</div>
-
-¿Quieres probar el bot antes de instalarlo? ¡Únete a la comunidad y sigue las novedades!  
-
-[![Unirse a la Comunidad](https://img.shields.io/badge/Únete_a_la_Comunidad-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW)
+- Node.js (LTS recomendado)  
+- npm  
+- git  
+- (opcional) sharp — para optimizar/redimensionar imágenes
 
 ---
 
-## 📲 Instalación y Ejecución en Termux
+## ⚙️ Instalación rápida (Termux / Linux)
 
-1. **Actualizar paquetes**
 ```bash
-pkg update && pkg upgrade -y
+# actualizar sistema
+pkg update && pkg upgrade -y        # (Termux)
+# o en Debian/Ubuntu:
+# sudo apt update && sudo apt upgrade -y
+
+# instalar git y node (Termux)
+pkg install git nodejs -y
+
+# clonar repo (ajusta la URL si es otra)
+git clone https://github.com/FELIX-OFC/Yotsuba-Bot.git
+cd Yotsuba-Bot
+
+# instalar dependencias
+npm install
+
+# crear carpetas de medios
+mkdir -p media/images media/gifs
+
+# (opcional) instalar sharp para redimensionar imágenes
+npm install sharp
+
+# iniciar el bot
+npm start
