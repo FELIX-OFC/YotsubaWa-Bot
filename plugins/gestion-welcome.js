@@ -1,132 +1,135 @@
-/* 
-🌛 Code created by Félix ofc 
-Please leave credits  👑
-🌟 Github -> https://github.com/FELIX-OFC
-*/
-
+import fetch from 'node-fetch'
 import fs from 'fs'
-import { join } from 'path'
-import { WAMessageStubType } from '@whiskeysockets/baileys'
+import path from 'path'
 
-// Función para obtener nombre y banner del bot según la sesión/config
-function getBotConfig(conn) {
-  let nombreBot = typeof botname !== 'undefined' ? botname : 'Yotsuba Nakano IA'
-  let bannerFinal = 'https://qu.ax/9Lheu'
-
-  const botActual = conn.user?.jid?.split('@')[0]?.replace(/\D/g, '')
-  const configPath = join('./JadiBots', botActual || '', 'config.json')
-  if (botActual && fs.existsSync(configPath)) {
-    try {
-      const config = JSON.parse(fs.readFileSync(configPath))
-      if (config.name) nombreBot = config.name
-      if (config.banner) bannerFinal = config.banner
-    } catch {}
-  }
-  return { nombreBot, bannerFinal }
-}
-
-// envío real de bienvenida (usado por el comando testwelcome y por el evento)
-async function sendWelcomeTo(conn, chatId, userId) {
+export async function before(m, { conn, participants, groupMetadata }) {
   try {
-    const chat = global.db.data.chats?.[chatId]
-    const isWelcomeEnabled = chat && typeof chat.welcome !== 'undefined' ? chat.welcome : true
-    if (!isWelcomeEnabled) return
+    if (!m.isGroup) return true
 
-    const taguser = '@' + (userId || '').split('@')[0]
-    const { nombreBot, bannerFinal } = getBotConfig(conn)
-    const devby = `${nombreBot}, ${typeof textbot !== 'undefined' ? textbot : ''}`
+    if (!global.db) global.db = { data: { chats: {} } }
+    if (!global.db.data) global.db.data = { chats: {} }
+    if (!global.db.data.chats) global.db.data.chats = {}
+    if (!global.db.data.chats[m.chat]) global.db.data.chats[m.chat] = {}
 
-    const bienvenida =
-      `👑 WELCOME 👑\n\n` +
-      `🌟 ${taguser}\n\n` +
-      `💫 Esperamos disfrutes tu estadía en este mundo mágico.\n\n` +
-      `> Usa *#help* para ver mi magia.`
+    const chat = global.db.data.chats[m.chat]
 
-    await conn.sendMessage(chatId, {
-      text: bienvenida,
-      contextInfo: {
-        mentionedJid: [userId],
-        externalAdReply: {
-          title: devby,
-          sourceUrl: 'https://whatsapp.com/',
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          thumbnailUrl: bannerFinal
+    if (chat.welcome === undefined) chat.welcome = true
+    if (chat.welcome === false && chat.welcome !== true) chat.welcome = true
+
+    if (m.text) {
+      const text = m.text.trim().toLowerCase()
+      const cmd = text.split(/\s+/)
+      if (cmd[0] === '#welcome') {
+        const action = cmd[1]
+        if (action === 'on') {
+          chat.welcome = true
+          await conn.reply(m.chat, '✅ Welcome activated 🍀', m)
+          return true
+        } else if (action === 'off') {
+          chat.welcome = false
+          await conn.reply(m.chat, '✅ Welcome deactivated', m)
+          return true
         }
       }
-    })
-  } catch (e) {
-    console.error('sendWelcomeTo error:', e)
-  }
-}
-
-// compatibilidad: exportar sendWelcome como estaba en tu código original
-export async function sendWelcome(conn, m) {
-  try {
-    // m puede venir desde el comando testwelcome (m.sender) o desde un evento (messageStubParameters)
-    const chatId = m.chat
-    const userId = m.sender || (m.messageStubParameters && m.messageStubParameters[0])
-    if (!chatId || !userId) return
-    await sendWelcomeTo(conn, chatId, userId)
-  } catch (e) {
-    console.error('sendWelcome wrapper error:', e)
-  }
-}
-
-// handler que escucha eventos de participantes (se ejecuta antes de procesar mensajes normales)
-let handler = m => m
-
-handler.before = async function (m, { conn, groupMetadata }) {
-  try {
-    if (!m.messageStubType || !m.isGroup) return true
-
-    const chat = global.db.data.chats?.[m.chat]
-    if (!chat) return true
-
-    // si el grupo tiene primaryBot definido y no es este, no procesar
-    const primaryBot = chat.primaryBot
-    if (primaryBot && conn.user?.jid !== primaryBot) return false
-
-    // solo procesar si welcome está activado (por defecto true)
-    const isWelcomeEnabled = typeof chat.welcome !== 'undefined' ? chat.welcome : true
-    if (!isWelcomeEnabled) return true
-
-    // evento: usuario agregado
-    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
-      const userId = m.messageStubParameters?.[0]
-      if (!userId) return true
-
-      // obtener groupMetadata si no fue pasado
-      const gm = groupMetadata || (await conn.groupMetadata?.(m.chat).catch(() => null)) || {}
-      // enviar usando la función que respeta la configuración y el banner del bot
-      await sendWelcomeTo(conn, m.chat, userId)
-      return false // detener procesamiento adicional si se desea
     }
 
-    return true
-  } catch (err) {
-    console.error('welcome handler.before error:', err)
-    return true
-  }
+    if (!chat.welcome) return true
+
+    if (!m.messageStubType) return true
+
+    const groupSize = (participants || []).length
+
+    const sendSingleWelcome = async (jid, text, user, quoted) => {
+      try {
+        let ppUrl = null
+        try {
+          ppUrl = await conn.profilePictureUrl(user, 'image')
+        } catch {}
+
+        if (!ppUrl) {
+          ppUrl = 'https://img.goodfon.com/original/2912x1632/d/bf/anime-art-wallpaper-bele-ryzhie-volosy-the-quintessential--4.jpg'
+        }
+
+        let imagePath = null
+        const response = await fetch(ppUrl)
+        if (!response.ok) throw new Error('Failed to fetch image')
+        const buffer = await response.buffer()
+        const tmpDir = './tmp'
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
+        imagePath = path.join(tmpDir, `welcome_${user}_${Date.now()}.jpg`)
+        fs.writeFileSync(imagePath, buffer)
+
+        let contextInfo = {
+          mentionedJid: [user]
+        }
+        if (global.ch && global.ch.ch1) {
+          contextInfo = {
+            ...contextInfo,
+            forwardingScore: 1,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+              newsletterJid: global.ch.ch1,
+              newsletterName: '🍀 YOTSUBA NAKANO CHANNEL 🍀',
+              serverMessageId: -1
+            }
+          }
+        }
+
+        if (imagePath && fs.existsSync(imagePath)) {
+          await conn.sendMessage(jid, {
+            image: { url: imagePath },
+            caption: text,
+            ...contextInfo
+          }, { quoted })
+
+          setTimeout(() => {
+            try {
+              fs.unlinkSync(imagePath)
+            } catch {}
+          }, 5000)
+        } else {
+          await conn.reply(jid, text, quoted, { mentions: [user] })
+        }
+
+      } catch (err) {
+        await conn.reply(jid, text, quoted, { mentions: [user] })
+      }
+    }
+
+    if (m.messageStubType === 27) {
+      const users = m.messageStubParameters || []
+      if (users.length === 0) return true
+
+      for (const user of users) {
+        if (!user) continue
+
+        const mentionTag = '@' + user.replace(/@.+/, '')
+
+        let displayName = mentionTag
+        try {
+          const userName = await conn.getName(user)
+          if (userName && userName.trim()) {
+            displayName = userName
+          }
+        } catch {}
+
+        const welcomeText = `🍀*YOTSUBA NAKANO*🍀
+
+🌟*¡NUEVO AMIGO EN LA AVENTURA!*🌟
+〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+🍀 ¡Hola ${displayName}! 😄 🍀
+🎉 ¡Bienvenido a *${groupMetadata?.subject || 'el grupo'}*! ¡Yotsuba está súper emocionada!
+👥 ¡Ahora somos *${groupSize}* compañeros listos para divertirnos!
+🏃‍♀️ ¡Usa *.menu* para ver todas las cosas geniales que podemos hacer juntos!
+🤗 ¡Yotsuba siempre da lo mejor! ¡Vamos a ser los mejores amigos!
+〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
+
+🌟*Yotsuba Nakano*🍀
+🍀*¡La hermana que siempre ayuda con una sonrisa!*🍀`
+
+        await sendSingleWelcome(m.chat, welcomeText, user, m)
+      }
+    }
+  } catch {}
+  return true
 }
-
-// comando de prueba (testwelcome) para enviar la bienvenida manualmente
-const cmdHandler = async (m, { conn, command }) => {
-  if (command !== 'testwelcome') return
-  const userId = m.sender
-  await sendWelcomeTo(conn, m.chat, userId)
-}
-
-cmdHandler.help = ['testwelcome']
-cmdHandler.tags = ['group']
-cmdHandler.command = ['testwelcome']
-cmdHandler.group = true
-
-// export default handler con before + propiedades del comando de prueba
-const exported = handler
-exported.help = cmdHandler.help
-exported.tags = cmdHandler.tags
-exported.command = cmdHandler.command
-exported.group = true
-
-export default exported
