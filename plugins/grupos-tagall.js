@@ -1,38 +1,35 @@
-//* Código Creado por Félix*
-//*No quites Los Créditos*
-
-const handler = async (m, { isOwner, isAdmin, conn, participants, args, usedPrefix }) => {
+const handler = async (m, { isOwner, isAdmin, conn, text, participants, args, command, usedPrefix }) => {
   if (usedPrefix == 'a' || usedPrefix == 'A') return;
+
+  const customEmoji = global.db.data.chats[m.chat]?.customEmoji || '🍀';
+  m.react(customEmoji);
+
   if (!(isAdmin || isOwner)) {
     global.dfail('admin', m, conn);
-    return;
+    throw false;
   }
 
-  const pesan = args.join(' ');
-  const invocador = m.pushName || 'Administrador';
-  const pp = 'https://qu.ax/yntnG.jpg'; // Imagen para el comando 
-
-  let teks = `╭─╮⊹︹︹⊹︹︹⊹╭─╮
-  𝗜𝗡𝗩𝗢𝗖𝗔𝗡𝗗𝗢 𝗚𝗥𝗨𝗣𝗢
-╚▬ִ▭࣪▬ִ▭࣪▬ִ▭࣪▬ִ▭࣪▬ִ▭╝
-
-❄ Te invocó: ${invocador}
-
-☃️ Mensaje: ${pesan ? pesan : ''}
-
-╭─⬣「 ✰𝗠𝗶𝗲𝗺𝗯𝗿𝗼𝘀✰ 」⬣\n`;
+  const pesan = args.join` `;
+  const oi = `*🍀 ANUNCIO DE YOTSUBA :* ${pesan} 🍀`;
+  let teks = `*🌟  YOTSUBA INVOCA A TODOS LOS AMIGOS  🌟*\n  *🎉 PARA ${participants.length} COMPAÑEROS DE AVENTURA 🎉* 😄\n\n ${oi}\n\n╭  ┄ 𝅄 ۪꒰ \`⡞᪲=͟͟͞${botname} ≼᳞ׄ\` ꒱ ۟ 𝅄 ┄\n`;
   for (const mem of participants) {
-    teks += `│⁖ฺ۟̇࣪·֗٬̤⃟🎁 @${mem.id.split('@')[0]}\n`;
+    teks += `┊🍀 @${mem.id.split('@')[0]}\n`;
   }
-  teks += '╰─⬣';
+  teks += `╰⸼ ┄ ┄ ┄ ─  ꒰  ׅ୭ *${vs}* ୧ ׅ ꒱  ┄  ─ ┄ ⸼`;
 
-  // Enviar el mensaje como imagen + texto, mencionando a todos
-  await conn.sendFile(m.chat, pp, 'invocando.jpg', teks, m, false, { mentions: participants.map(a => a.id) });
+  const yotsubaImageUrl = 'https://img.goodfon.com/original/2912x1632/a/48/anime-art-wallpaper-ryzhie-volosy-the-quintessential-quint-1.jpg';
+
+  conn.sendMessage(m.chat, { 
+    image: { url: yotsubaImageUrl },
+    caption: teks,
+    mentions: participants.map((a) => a.id) 
+  });
 };
 
-handler.help = ['tagall *<mensaje>*', 'invocar *<mensaje>*'];
-handler.tags = ['grupo'];
-handler.command = ['tagall', 'todos', 'mensionall', 'invocar'];
+handler.help = ['todos *<mensaje opcional>*'];
+handler.tags = ['group'];
+handler.command = ['todos', 'invocar', 'tagall'];
 handler.admin = true;
 handler.group = true;
+
 export default handler;
