@@ -1,72 +1,57 @@
-/*
-🍀💛 Plugin inspirado en Yotsuba Nakano 💛🍀
-Genki mode: ON!! ✨
-Código adaptado para bots tipo Yotsuba / anime fun style
-
-Autor base: Félix-OFIC
-Estilo Yotsuba Nakano 🌻
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
 */
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 
-let handler = async (m, { conn }) => {
-  let who = m.mentionedJid.length > 0
-    ? m.mentionedJid[0]
-    : (m.quoted ? m.quoted.sender : null)
+let handler = async (m, { conn, usedPrefix }) => {
+  let who;
 
-  let name = who
-    ? (await conn.getName(who)) || who.replace('@s.whatsapp.net', '')
-    : null
+  if (m.mentionedJid.length > 0) {  
+    who = m.mentionedJid[0];  
+  } else if (m.quoted) {  
+    who = m.quoted.sender;  
+  } else {  
+    who = m.sender;  
+  }  
 
-  let name2 = m.pushName
-    || (await conn.getName(m.sender))
-    || m.sender.split('@')[0]
+  let name = conn.getName(who);  
+  let name2 = conn.getName(m.sender);  
+  m.react('💥');  
 
-  // Mensajes estilo Yotsuba (genki + anime)
-  let str = who
-    ? `🍀💥 ¡Yotsubaaa! 💥🍀\n\`${name2}\` derrotó a \`${name}\` en una pelea súper caótica ⚔️😆`
-    : `🍀✨ \`${name2}\` salió corriendo sin explicación… muy estilo Yotsuba 😜💨`
+  let str;  
+  if (m.mentionedJid.length > 0) {  
+    str = `${name2} acaba de "matar" a ${name || who} con un ataque sorpresa de Yotsuba! 😆`;  
+  } else if (m.quoted) {  
+    str = `${name2} "mata" a ${name || who} al estilo Yotsuba Nakano. ¡Boom! 🎉`;  
+  } else {  
+    str = `${name2} "mata" a todos en el grupo con la energía de Yotsuba! 💣`.trim();  
+  }  
 
-  if (!m.isGroup) {
-    await conn.sendMessage(
-      m.chat,
-      { text: '🍀 Este comando solo funciona en grupos, ¡jeje!' },
-      { quoted: m }
-    )
-    return
+  if (m.isGroup) {  
+    let pp = 'https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4'; // Video cute de Yotsuba o similar  
+    let pp2 = 'https://media.tenor.com/oylzydvTDV4AAAPo/kusuriya-no-hitorigoto-maomao.mp4'; // Otro video juguetón  
+    let pp3 = 'https://media.tenor.com/t8Ab2Z5uMkUAAAPo/toji-jjk.mp4'; // Pose energética  
+    let pp4 = 'https://media.tenor.com/dxwWkT10bmoAAAPo/wind-breaker-wind-breaker-togame.mp4'; // Ataque juguetón  
+    let pp5 = 'https://media.tenor.com/vNapCUP0d3oAAAPo/pjsk-pjsk-anime.mp4'; // Animación linda  
+    let pp6 = 'https://media.tenor.com/KM3VNP5d1FIAAAPo/miku-hello.mp4'; // Saludo/ataque cute  
+    let pp7 = 'https://media.tenor.com/6Gj1s-kpsd0AAAPo/dante-devil-may-cry-anime.mp4'; // Estilo anime  
+    let pp8 = 'https://i.pinimg.com/originals/4e/4d/4a/4e4d4a4e4e4e4e4e4e4e4e4e.gif'; // GIF de Yotsuba (agrega más si quieres)  
+
+    const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8];  
+    const video = videos[Math.floor(Math.random() * videos.length)];  
+
+    let mentions = [who];  
+    conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, mentions }, { quoted: m });  
   }
-
-  // GIFs / videos (anime vibes)
-  const videos = [
-    'https://media.tenor.com/jrnH6CdNne0AAAPo/2s.mp4',
-    'https://media.tenor.com/NbBCakbfZnkAAAPo/die-kill.mp4',
-    'https://media.tenor.com/SIrXZQWK9WAAAAPo/me-friends.mp4',
-    'https://media.tenor.com/Ay1Nm0X2VP8AAAPo/falling-from-window-anime-death.mp4',
-    'https://media.tenor.com/rblZGXCYSmAAAAPo/akame.mp4',
-    'https://media.tenor.com/dtXcyLvxLLkAAAPo/akame.mp4',
-    'https://media.tenor.com/WakyzIJP0t0AAAPo/angels-of-death-anime-boy-bandage.mp4',
-    'https://media.tenor.com/wa_191SsAEwAAAPo/nana-anime.mp4'
-  ]
-
-  const video = videos[Math.floor(Math.random() * videos.length)]
-
-  await conn.sendMessage(
-    m.chat,
-    {
-      video: { url: video },
-      gifPlayback: true,
-      caption: str,
-      mentions: who ? [who] : []
-    },
-    { quoted: m }
-  )
 }
 
-handler.help = ['kill']
-handler.tags = ['anime', 'yotsuba']
-handler.command = ['kill', 'matar', 'muere']
-handler.group = true
-handler.register = true
-
+handler.help = ['kill/matar @tag'];
+handler.tags = ['anime'];
+handler.command = ['kill', 'matar'];
+handler.group = true;
+handler.register = true;
 export default handler
