@@ -2,7 +2,7 @@
 
 # 💚 YOTSUBA NAKANO BOT 💚
 
-![Yotsuba Nakano Banner](content://media/external/downloads/1000222272)
+![Yotsuba Nakano Banner](https://imgur.com/a/6oDFtLh)
 
 [![Bot Status](https://img.shields.io/badge/-SIMPLE--WHATSAPP--BOT-green?colorA=%21ff0000&colorB=%21017e40&style=for-the-badge)](https://github.com/FELIX-OFC)  
 [![Desarrollador](https://img.shields.io/badge/Desarrollador-FELIX--OFC-orange?style=for-the-badge&logo=github)](https://github.com/FELIX-OFC)  
