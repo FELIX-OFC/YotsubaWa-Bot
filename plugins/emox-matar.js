@@ -3,7 +3,7 @@
 Genki mode: ON!! ✨
 Código adaptado para bots tipo Yotsuba / anime fun style
 
-Autor base: Brauliovh3
+Autor base: Félix-OFIC
 Estilo Yotsuba Nakano 🌻
 */
 
