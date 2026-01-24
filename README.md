@@ -1,12 +1,12 @@
 <div align="center">
 
-# 💚 YOTSUBA NAKANO BOT 💚
+# 👑👑 ¡YOTSUBA BOT! 👑👑
 
 ![Yotsuba Nakano Banner](https://wallpapercave.com/wp/wp4373001.jpg)
 
-[![Bot Status](https://img.shields.io/badge/-SIMPLE--WHATSAPP--BOT-green?colorA=%21ff0000&colorB=%21017e40&style=for-the-badge)](https://github.com/FELIX-OFC)  
-[![Desarrollador](https://img.shields.io/badge/Desarrollador-FELIX--OFC-orange?style=for-the-badge&logo=github)](https://github.com/FELIX-OFC)  
-[![Editor](https://img.shields.io/badge/Editor-makiharukawa.bot%40gmail.com-blue?style=for-the-badge&logo=gmail)]
+[![¡Estado del Bot Supremo!](https://img.shields.io/badge/-¡BOT--ENERGÉTICO--Y--DIVERTIDO!-green?colorA=%23ffd700&colorB=%2300ced1&style=for-the-badge)](https://github.com/FELIX-OFC)  
+[![¡Creador Legendario!](https://img.shields.io/badge/Creador-FELIX--OFC-gold?style=for-the-badge&logo=github)](https://github.com/FELIX-OFC)  
+[![¡Contacto Especial!](https://img.shields.io/badge/Contacto-makiharukawa.bot%40gmail.com-royalblue?style=for-the-badge&logo=gmail)]
 
 </div>
 
@@ -14,85 +14,88 @@
 
 <div align="center">
 
-### ⚠️ AVISO IMPORTANTE ⚠️  
-**Este proyecto corre localmente (Termux / VPS). No depende de servicios de hosting externos.**
+### ✨ ¡ATENCIÓN, AVENTUREROS! ✨  
+**¡Este bot es totalmente tuyo! Corre en Termux o VPS con total independencia. ¡Sin ataduras externas, pura libertad y diversión!**
 
 </div>
 
 ---
 
-## ✨ Sobre Yotsuba Nakano Bot
+## 👑👑 ¡Bienvenidos a mi Mundo, Soy Yotsuba Bot! 👑👑
 
-Yotsuba Nakano Bot es un asistente para WhatsApp con personalidad alegre y estilo kawaii inspirado en Yotsuba: gestiona grupos, envía saludos, crea stickers y ofrece mini-juegos. Modular, personalizable y pensado para ejecutarse en Termux o en un servidor.
+¡Holaaa, amigos! ¡Soy Yotsuba Bot, tu compañera súper alegre, energética y siempre lista para nuevas aventuras en WhatsApp! Inspirada en la adorable Yotsuba, traigo un estilo kawaii lleno de vitalidad y sonrisas. ¡Gestiono grupos con elegancia y magia, envío saludos radiantes, creo stickers encantadores y ofrezco mini-juegos emocionantes para que cada chat sea una fiesta! Todo modular, fácil de personalizar y perfecto para tu Termux o servidor. ¡Ven, únete y hagamos que el mundo sea más brillante juntos! 👑💃🏻
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" width="60" height="60">
 
-  ## ✅ Características principales
+  ## 🎊 ¡Mis Poderes Especiales! 🎊
 </div>
 
-| Estado | Funcionalidad |
-|:------:|:------------|
-| ✅ | Comandos sociales (saludos, menús, respuestas kawaii) |
-| ✅ | Gestión de grupos (bienvenida, menciones, moderación) |
-| ✅ | Envío de GIFs/MP4 y stickers |
-| ✅ | Plugins modulares y Sub-Bots (JadiBots) |
-| ✅ | Protección anti-spam y anti-enlace |
-| ✅ | Mini-juegos y sistema RPG básico |
-| ✅ | Descargas de música y videos desde URLs |
-| 🔜 | Nuevas características periódicas |
+| ¡Estado! | ¡Qué Puedo Hacer! |
+|:--------:|:-----------------|
+| ✅ | ¡Comandos sociales llenos de alegría: saludos cálidos, menús intuitivos y respuestas kawaii que iluminan cualquier conversación! |
+| ✅ | ¡Gestión de grupos profesional: bienvenidas personalizadas, menciones precisas y moderación impecable para un ambiente perfecto! |
+| ✅ | ¡Envío de GIFs, MP4 y stickers con un toque único y creativo! |
+| ✅ | ¡Plugins modulares y Sub-Bots para expandir la funcionalidad sin complicaciones! |
+| ✅ | ¡Protección avanzada contra spam y enlaces no deseados, manteniendo todo seguro y ordenado! |
+| ✅ | ¡Mini-juegos divertidos y un sistema RPG básico para aventuras interminables! |
+| ✅ | ¡Descargas rápidas de música y videos desde URLs, con calidad y elegancia! |
+| 🔜 | ¡Actualizaciones constantes con nuevas características innovadoras y brillantes! |
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" width="60" height="60">
 
-  ## 📱 Conéctate / Soporte
+  ## 📱 ¡Conéctate a mi Aventura! 📱
 </div>
 
-- 🔔 **Canal oficial (anuncios):** https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A  
-- 👥 **Comunidad / Grupo:** https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW  
-- 📞 **Soporte / Owner:** **+57 310 7400303**  
-- ✉️ **Editor / Contacto técnico:** makiharukawa.bot@gmail.com
-- 💚 **Comandos / Yotsuba Nakano:**
-https://yotsuba.giize.com/commands
+- 🔔 **¡Canal Oficial de Anuncios Mágicos!** https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A  
+- 👥 **¡Grupo de Comunidad Exclusiva!** https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW  
+- 📞 **¡Owner Principal!** [+1 (809) 437 4392](https://wa.me/18094374392)  
+<a href="https://wa.me/18094374392"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Contactar Owner</button></a>  
+- 📞 **¡Contacto de Soporte!** [+57 310 7400303](https://wa.me/573107400303)  
+<a href="https://wa.me/573107400303"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Contactar Soporte</button></a>  
+- ✉️ **¡Soporte Técnico Elite!** makiharukawa.bot@gmail.com
+- 💚 **¡Lista de Comandos Especiales!** https://yotsuba.giize.com/commands
 
 ---
 
-## 📦 Requisitos
+## 🛠️ ¡Requisitos para Empezar la Magia! 🛠️
 
-- Node.js (LTS recomendado)  
-- npm  
-- git  
-- (opcional) sharp — para optimizar/redimensionar imágenes
+- Node.js (versión LTS para una estabilidad óptima y rendimiento superior)  
+- npm (para gestionar paquetes de manera eficiente y sencilla)  
+- git (para clonar y mantener actualizado el repositorio con facilidad)  
+- (opcional) sharp — para optimizar y manejar imágenes con precisión profesional
 
 ---
 
-## ⚙️ Instalación rápida (Termux / Linux)
+## 🚀 ¡Instalación Sencilla y Elegante! (Termux / Linux) 🚀
 
 ```bash
-# actualizar sistema
-pkg update && pkg upgrade -y        # (Termux)
-# o en Debian/Ubuntu:
+# Actualiza tu sistema para un inicio impecable y sin errores
+pkg update && pkg upgrade -y        # (En Termux)
+# O en Debian/Ubuntu:
 # sudo apt update && sudo apt upgrade -y
 
-# instalar git y node (Termux)
+# Instala git y Node.js en Termux con rapidez
 pkg install git nodejs -y
 
-# clonar repo (ajusta la URL si es otra)
+# Clona el repositorio exclusivo y entra en la carpeta
 git clone https://github.com/FELIX-OFC/Yotsuba-Bot.git
 cd Yotsuba-Bot
 
-# instalar dependencias
+# Instala todas las dependencias con estilo y eficiencia
 npm install
 
-# crear carpetas de medios
+# Crea directorios para almacenar medios de forma organizada
 mkdir -p media/images media/gifs
 
-# (opcional) instalar sharp para redimensionar imágenes
+# (opcional) Instala sharp para un manejo avanzado de imágenes
 npm install sharp
 
-# iniciar el bot
+# ¡Inicia el bot y comienza la aventura inolvidable!
 npm start
+```
