@@ -56,6 +56,8 @@ Yotsuba Nakano Bot es un asistente para WhatsApp con personalidad alegre y estil
 - 👥 **Comunidad / Grupo:** https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW  
 - 📞 **Soporte / Owner:** **+57 310 7400303**  
 - ✉️ **Editor / Contacto técnico:** makiharukawa.bot@gmail.com
+- 💚 **Comandos / Yotsuba Nakano:**
+https://yotsuba.giize.com/commands
 
 ---
 
