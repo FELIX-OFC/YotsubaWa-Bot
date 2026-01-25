@@ -84,8 +84,8 @@ pkg update && pkg upgrade -y        # (En Termux)
 pkg install git nodejs -y
 
 # Clona el repositorio exclusivo y entra en la carpeta
-git clone https://github.com/FELIX-OFC/Yotsuba-Bot.git
-cd Yotsuba-Bot
+git clone https://github.com/FELIX-OFC/YotsubaWa-Bot
+cd YotsubaWa-Bot
 
 # Instala todas las dependencias con estilo y eficiencia
 npm install
