@@ -1,135 +1,110 @@
-import fetch from 'node-fetch'
-import fs from 'fs'
-import path from 'path'
+/* 
+🌛 Code created by Félix ofc 
+Please leave credits  👑
+🌟 Github -> https://github.com/FELIX-OFC
+*/
 
-export async function before(m, { conn, participants, groupMetadata }) {
+import { WAMessageStubType } from '@whiskeysockets/baileys'
+
+// Función para enviar bienvenida
+async function sendWelcome(conn, chatId, userId) {
   try {
-    if (!m.isGroup) return true
+    const chat = global.db.data.chats?.[chatId]
+    const isWelcomeEnabled = chat && chat.welcome !== undefined ? chat.welcome : true
+    if (!isWelcomeEnabled) return
 
-    if (!global.db) global.db = { data: { chats: {} } }
-    if (!global.db.data) global.db.data = { chats: {} }
-    if (!global.db.data.chats) global.db.data.chats = {}
-    if (!global.db.data.chats[m.chat]) global.db.data.chats[m.chat] = {}
+    const taguser = '@' + (userId || '').split('@')[0]
+    const nombreBot = 'Yotsuba Nakano'
+    const profilePic = await conn.profilePictureUrl(userId, 'image').catch(() => 'https://i.imgur.com/whvB7v7.png') // Fallback si no hay foto
 
-    const chat = global.db.data.chats[m.chat]
+    const bienvenida = 
+      `👑⚡🌱 ¡Welcome al grupo, ${taguser}! 🌟\n\n` +
+      `Yotsuba Nakano te da la bienvenida con toda su energía alegre y kawaii! 😊💚\n\n` +
+      `Esperamos disfrutes la estadía, usa *.menu* para ver mi magia mágica! ✨`
 
-    if (chat.welcome === undefined) chat.welcome = true
-    if (chat.welcome === false && chat.welcome !== true) chat.welcome = true
-
-    if (m.text) {
-      const text = m.text.trim().toLowerCase()
-      const cmd = text.split(/\s+/)
-      if (cmd[0] === '#welcome') {
-        const action = cmd[1]
-        if (action === 'on') {
-          chat.welcome = true
-          await conn.reply(m.chat, '✅ Welcome activated 🍀', m)
-          return true
-        } else if (action === 'off') {
-          chat.welcome = false
-          await conn.reply(m.chat, '✅ Welcome deactivated', m)
-          return true
-        }
-      }
-    }
-
-    if (!chat.welcome) return true
-
-    if (!m.messageStubType) return true
-
-    const groupSize = (participants || []).length
-
-    const sendSingleWelcome = async (jid, text, user, quoted) => {
-      try {
-        let ppUrl = null
-        try {
-          ppUrl = await conn.profilePictureUrl(user, 'image')
-        } catch {}
-
-        if (!ppUrl) {
-          ppUrl = 'https://img.goodfon.com/original/2912x1632/d/bf/anime-art-wallpaper-bele-ryzhie-volosy-the-quintessential--4.jpg'
-        }
-
-        let imagePath = null
-        const response = await fetch(ppUrl)
-        if (!response.ok) throw new Error('Failed to fetch image')
-        const buffer = await response.buffer()
-        const tmpDir = './tmp'
-        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
-        imagePath = path.join(tmpDir, `welcome_${user}_${Date.now()}.jpg`)
-        fs.writeFileSync(imagePath, buffer)
-
-        let contextInfo = {
-          mentionedJid: [user]
-        }
-        if (global.ch && global.ch.ch1) {
-          contextInfo = {
-            ...contextInfo,
-            forwardingScore: 1,
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-              newsletterJid: global.ch.ch1,
-              newsletterName: '🍀 YOTSUBA NAKANO CHANNEL 🍀',
-              serverMessageId: -1
-            }
-          }
-        }
-
-        if (imagePath && fs.existsSync(imagePath)) {
-          await conn.sendMessage(jid, {
-            image: { url: imagePath },
-            caption: text,
-            ...contextInfo
-          }, { quoted })
-
-          setTimeout(() => {
-            try {
-              fs.unlinkSync(imagePath)
-            } catch {}
-          }, 5000)
-        } else {
-          await conn.reply(jid, text, quoted, { mentions: [user] })
-        }
-
-      } catch (err) {
-        await conn.reply(jid, text, quoted, { mentions: [user] })
-      }
-    }
-
-    if (m.messageStubType === 27) {
-      const users = m.messageStubParameters || []
-      if (users.length === 0) return true
-
-      for (const user of users) {
-        if (!user) continue
-
-        const mentionTag = '@' + user.replace(/@.+/, '')
-
-        let displayName = mentionTag
-        try {
-          const userName = await conn.getName(user)
-          if (userName && userName.trim()) {
-            displayName = userName
-          }
-        } catch {}
-
-        const welcomeText = `🍀*YOTSUBA NAKANO*🍀
-
-🌟*¡NUEVO AMIGO EN LA AVENTURA!*🌟
-〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
-🍀 ¡Hola ${displayName}! 😄 🍀
-🎉 ¡Bienvenido a *${groupMetadata?.subject || 'el grupo'}*! ¡Yotsuba está súper emocionada!
-👥 ¡Ahora somos *${groupSize}* compañeros listos para divertirnos!
-🏃‍♀️ ¡Usa *.menu* para ver todas las cosas geniales que podemos hacer juntos!
-🤗 ¡Yotsuba siempre da lo mejor! ¡Vamos a ser los mejores amigos!
-〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
-
-🌟*Yotsuba Nakano*🍀
-🍀*¡La hermana que siempre ayuda con una sonrisa!*🍀`
-
-        await sendSingleWelcome(m.chat, welcomeText, user, m)
-      }
-    }
-  } catch {}
-  return true
+    await conn.sendMessage(chatId, {
+      image: { url: profilePic },
+      caption: bienvenida,
+      mentions: [userId]
+    })
+  } catch (e) {
+    console.error('Error en sendWelcome:', e)
+  }
 }
+
+// Handler para eventos de grupo (antes de procesar mensajes)
+let handler = m => m
+
+handler.before = async function (m, { conn, groupMetadata }) {
+  try {
+    if (!m.messageStubType || !m.isGroup) return true
+
+    const chat = global.db.data.chats?.[m.chat]
+    if (!chat) return true
+
+    const isWelcomeEnabled = typeof chat.welcome !== 'undefined' ? chat.welcome : true
+    if (!isWelcomeEnabled) return true
+
+    // Evento: usuario añadido al grupo
+    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+      const userId = m.messageStubParameters?.[0]
+      if (!userId) return true
+
+      await sendWelcome(conn, m.chat, userId)
+      return false
+    }
+
+    return true
+  } catch (err) {
+    console.error('Error en welcome handler.before:', err)
+    return true
+  }
+}
+
+// Comando para activar/desactivar y test
+const cmdHandler = async (m, { conn, command, args, usedPrefix, isAdmin, isOwner }) => {
+  if (command === 'testwelcome') {
+    // Test: envía bienvenida simulada al sender
+    await sendWelcome(conn, m.chat, m.sender)
+    return
+  }
+
+  if (command !== 'welcome') return
+
+  // Solo admins/owner pueden activar/desactivar
+  if (!(isAdmin || isOwner)) return conn.reply(m.chat, '🤨 Solo los administradores pueden activar o desactivar la bienvenida.', m)
+
+  const chat = global.db.data.chats[m.chat]
+  if (!chat) return
+  let isWelcomeEnabled = chat.welcome !== undefined ? chat.welcome : true
+
+  if (args[0] === 'on') {
+    if (isWelcomeEnabled) return conn.reply(m.chat, `🌟 La bienvenida ya estaba activada.`, m)
+    isWelcomeEnabled = true
+  } else if (args[0] === 'off') {
+    if (!isWelcomeEnabled) return conn.reply(m.chat, `❄ La bienvenida ya estaba desactivada.`, m)
+    isWelcomeEnabled = false
+  } else {
+    return conn.reply(
+      m.chat,
+      `☃️ Usa: *\( {usedPrefix + command} on* para activar o * \){usedPrefix + command} off* para desactivar.\n\n🛠 Estado actual: *${isWelcomeEnabled ? '✓ Activado' : '✗ Desactivado'}*`,
+      m
+    )
+  }
+
+  chat.welcome = isWelcomeEnabled
+  return conn.reply(m.chat, `La bienvenida fue *${isWelcomeEnabled ? 'activada' : 'desactivada'}* en este grupo.`, m)
+}
+
+cmdHandler.help = ['welcome on/off', 'testwelcome']
+cmdHandler.tags = ['group']
+cmdHandler.command = ['welcome', 'testwelcome']
+cmdHandler.group = true
+
+const exported = handler
+exported.help = cmdHandler.help
+exported.tags = cmdHandler.tags
+exported.command = cmdHandler.command
+exported.group = true
+
+export default exported
