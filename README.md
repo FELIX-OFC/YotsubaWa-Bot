@@ -1,13 +1,16 @@
 ```markdown
 <div align="center">
 
-# 🌟💚 ¡YOTSUBA NAKANO BOT! 💚🌟
+# 🌟💚 YOTSUBA NAKANO BOT 💚🌟
 
-![Yotsuba Nakano Banner](https://wallpapers.com/images/featured/yotsuba-nakano-4k-tk4q4pb1q8e8q7l5.jpg)
+![Yotsuba Nakano Banner](https://wallpapercave.com/wp/wp4373001.jpg)
 
-[![¡Estado del Bot Supremo!](https://img.shields.io/badge/-¡BOT--ENERGÉTICO--Y--DIVERTIDO!-green?colorA=%23ffd700&colorB=%2300ced1&style=for-the-badge)](https://github.com/FELIX-OFC)  
-[![¡Creador Legendario!](https://img.shields.io/badge/Creador-FELIX--OFC-gold?style=for-the-badge&logo=github)](https://github.com/FELIX-OFC)  
-[![¡Contacto Especial!](https://img.shields.io/badge/Contacto-makiharukawa.bot%40gmail.com-royalblue?style=for-the-badge&logo=gmail)]
+[![GitHub Stars](https://img.shields.io/github/stars/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&color=gold&logo=github)](https://github.com/FELIX-OFC/Yotsuba-Bot/stargazers)  
+[![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&color=cyan&logo=github)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
+[![GitHub Issues](https://img.shields.io/github/issues/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&color=red&logo=github)](https://github.com/FELIX-OFC/Yotsuba-Bot/issues)  
+[![License](https://img.shields.io/github/license/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&color=green)](https://github.com/FELIX-OFC/Yotsuba-Bot/blob/main/LICENSE)  
+[![Node.js](https://img.shields.io/badge/Node.js-v18+-brightgreen?style=for-the-badge&logo=node.js)](https://nodejs.org/)  
+[![Baileys](https://img.shields.io/badge/Baileys-Multi--Device-blue?style=for-the-badge&logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)  
 
 </div>
 
@@ -15,89 +18,138 @@
 
 <div align="center">
 
-### ✨ ¡ATENCIÓN, AVENTUREROS KAWAII! ✨  
-**¡Este bot es totalmente tuyo y corre localmente en Termux o VPS! ¡Sin dependencias externas, pura magia energética y libertad absoluta! 💥🌈**
+### ⚠️ ¡Aviso Importante para Aventureros! ⚠️  
+**Yotsuba Nakano Bot opera de manera local en Termux o VPS, ofreciendo independencia total sin dependencias externas. ¡Pura potencia y flexibilidad para tu experiencia WhatsApp!**
 
 </div>
 
 ---
 
-## 🌸💫 ¡Hola, Soy Yotsuba Nakano Bot – Tu Compañera Alegre y Llena de Energía! 💫🌸
+## 📖 Descripción General
 
-¡Yay! ¡Bienvenidos a mi mundo lleno de sonrisas, aventuras y diversión infinita! Soy Yotsuba Nakano Bot, inspirada en la chica más energética y kawaii del anime. Con mi estilo vibrante y juguetón, gestiono grupos con un toque mágico, envío saludos radiantes que iluminan el día, creo stickers adorables y ofrezco mini-juegos emocionantes para que cada chat sea una fiesta eterna. ¡Todo es modular, super personalizable y diseñado para correr sin problemas en tu Termux o servidor! ¡Únete a mí y hagamos que WhatsApp brille con alegría pura! 👑🎀💚
+Yotsuba Nakano Bot es un bot avanzado para WhatsApp inspirado en el personaje energético y kawaii de *The Quintessential Quintuplets*. Diseñado para elevar tus chats con funcionalidades inteligentes, personalización profunda y un toque de diversión anime. Ideal para comunidades, grupos privados o uso personal, este bot combina moderación robusta, herramientas multimedia y juegos interactivos en un paquete modular y escalable. Desarrollado con Baileys Multi-Device para compatibilidad perfecta y rendimiento óptimo.
+
+**¿Por qué elegir Yotsuba Bot?**
+- **Kawaii y Energético:** Interfaz y respuestas con estilo Yotsuba para una experiencia alegre y única.
+- **Modular y Extensible:** Plugins fáciles de agregar, Sub-Bots para multi-instancias.
+- **Seguro y Eficiente:** Protección anti-spam, ejecución local sin servidores externos.
+- **Comunidad Activa:** Soporte dedicado y actualizaciones regulares.
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" width="60" height="60">
 
-  ## 🎉 ¡Mis Superpoderes Kawaii y Energéticos! 🎉
+  ## ✨ Funcionalidades Destacadas
 </div>
 
-| ¡Estado! | ¡Qué Puedo Hacer con Mi Energía Infinita! |
-|:--------:|:-----------------------------------------|
-| ✅ | ¡Comandos sociales llenos de alegría: saludos radiantes, menús intuitivos y respuestas kawaii que hacen sonreír a todos! 😄 |
-| ✅ | ¡Gestión de grupos mágica: bienvenidas personalizadas, menciones precisas y moderación impecable para un ambiente feliz y ordenado! 🌟 |
-| ✅ | ¡Envío de GIFs, MP4 y stickers con un toque único y creativo, ¡todo con vibes de Yotsuba! 🎀 |
-| ✅ | ¡Plugins modulares y Sub-Bots para expandir la diversión sin límites ni complicaciones! 🚀 |
-| ✅ | ¡Protección avanzada contra spam y enlaces malvados, ¡manteniendo todo seguro y positivo! 🛡️ |
-| ✅ | ¡Mini-juegos divertidos y un sistema RPG básico para aventuras llenas de risas y desafíos! 🎮 |
-| ✅ | ¡Descargas rápidas de música y videos desde URLs, con calidad premium y estilo kawaii! 📥 |
-| 🔜 | ¡Actualizaciones constantes con nuevas características brillantes, ¡siempre evolucionando con energía! ✨ |
+| Estado | Funcionalidad | Descripción |
+|:------:|:-------------|:------------|
+| ✅ | **Comandos Sociales** | Saludos personalizados, menús interactivos y respuestas kawaii para animar cualquier conversación. |
+| ✅ | **Gestión de Grupos** | Bienvenidas automáticas, menciones masivas, moderación anti-enlaces y detección de cambios. |
+| ✅ | **Multimedia y Stickers** | Creación de stickers, envío de GIFs/MP4 y descargas de videos/música desde plataformas populares. |
+| ✅ | **Sub-Bots y Plugins** | Soporte para instancias secundarias (JadiBots) y extensión modular con plugins personalizados. |
+| ✅ | **Seguridad Avanzada** | Anti-spam, anti-enlaces maliciosos y modo admin para control total del grupo. |
+| ✅ | **Juegos y RPG** | Mini-juegos divertidos y sistema RPG con economía, niveles y recompensas. |
+| ✅ | **Herramientas IA** | Integración con APIs de IA para chat inteligente, generación de imágenes y más. |
+| 🔜 | **Próximas Actualizaciones** | Soporte para voz, más integraciones IA y optimizaciones de rendimiento. |
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" width="60" height="60">
 
-  ## 📱 ¡Conéctate a Mi Mundo de Alegría y Soporte! 📱
+  ## 📱 Conéctate y Soporte
 </div>
 
-- 🔔 **¡Canal Oficial de Anuncios Mágicos y Energéticos!** https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A  
-- 👥 **¡Grupo de Comunidad Kawaii y Divertida!** https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW  
-- 📞 **¡Owner Principal – ¡Llama para Aventuras!** [+1 (809) 437 4392](https://wa.me/18094374392)  
-<a href="https://wa.me/18094374392"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">¡Contactar Owner!</button></a>  
-- 📞 **¡Contacto de Soporte Rápido y Alegre!** [+57 310 7400303](https://wa.me/573107400303)  
-<a href="https://wa.me/573107400303"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">¡Contactar Soporte!</button></a>  
-- ✉️ **¡Soporte Técnico Elite y Kawaii!** makiharukawa.bot@gmail.com
-- 💚 **¡Lista de Comandos Mágicos y Detallados!** https://yotsuba.giize.com/commands
+- 🔔 **Canal Oficial:** [Únete para noticias y actualizaciones](https://whatsapp.com/channel/0029VbBvrmwC1Fu5SYpbBE2A)  
+- 👥 **Grupo de Comunidad:** [Comparte experiencias y tips](https://chat.whatsapp.com/HqWaAzi68tf37DHjJrvoRW)  
+- 📞 **Owner Principal:** +1 (809) 437 4392  
+  <a href="https://wa.me/18094374392"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Contactar Owner</button></a>  
+- 📞 **Soporte Técnico:** +57 310 7400303  
+  <a href="https://wa.me/573107400303"><button style="background-color: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Contactar Soporte</button></a>  
+- ✉️ **Email Técnico:** makiharukawa.bot@gmail.com  
+- 💻 **Lista de Comandos:** [Explora todos los comandos](https://yotsuba.giize.com/commands)  
 
 ---
 
-## 🛠️ ¡Requisitos para Desatar Mi Energía Kawaii! 🛠️
+## 🛠️ Requisitos del Sistema
 
-- Node.js (versión LTS para una estabilidad óptima y rendimiento superior)  
-- npm (para gestionar paquetes de manera eficiente y sencilla)  
-- git (para clonar y mantener actualizado el repositorio con facilidad)  
-- (opcional) sharp — para optimizar y manejar imágenes con precisión profesional
+- **Node.js:** Versión LTS (recomendada para estabilidad).  
+- **npm:** Gestor de paquetes incluido con Node.js.  
+- **Git:** Para clonar y actualizar el repositorio.  
+- **Opcional - Sharp:** Para procesamiento avanzado de imágenes (npm install sharp).  
 
 ---
 
-## 🚀 ¡Instalación Sencilla, Rápida y Llena de Alegría! (Termux / Linux) 🚀
+## 🚀 Instalación Paso a Paso (Termux / Linux / VPS)
 
 ```bash
-# ¡Actualiza tu sistema para un inicio impecable y sin errores, yay!
-pkg update && pkg upgrade -y        # (En Termux)
-# O en Debian/Ubuntu:
-# sudo apt update && sudo apt upgrade -y
+# Paso 1: Actualiza tu sistema para un inicio óptimo
+pkg update && pkg upgrade -y  # Termux
+# O en Ubuntu/Debian:
+sudo apt update && sudo apt upgrade -y
 
-# ¡Instala git y Node.js en Termux con rapidez y estilo!
-pkg install git nodejs -y
+# Paso 2: Instala dependencias esenciales
+pkg install git nodejs -y  # Termux
+# O en Ubuntu/Debian:
+sudo apt install git nodejs -y
 
-# ¡Clona mi repositorio exclusivo y entra en mi mundo mágico!
-git clone https://github.com/FELIX-OFC/YotsubaWa-Bot
-cd YotsubaWa-Bot
+# Paso 3: Clona el repositorio
+git clone https://github.com/FELIX-OFC/Yotsuba-Bot.git
+cd Yotsuba-Bot
 
-# ¡Instala todas las dependencias con energía y eficiencia!
+# Paso 4: Instala paquetes Node.js
 npm install
 
-# ¡Crea directorios para almacenar medios de forma organizada y kawaii!
+# Paso 5: Crea directorios para medios
 mkdir -p media/images media/gifs
 
-# (opcional) ¡Instala sharp para un manejo avanzado de imágenes con brillo!
+# Paso 6: Opcional - Instala Sharp para imágenes
 npm install sharp
 
-# ¡Inicia el bot y comienza la aventura inolvidable llena de sonrisas!
+# Paso 7: Inicia el bot
 npm start
 ```
+
+**Notas de Instalación:**
+- Si usas VPS, considera PM2 para ejecución persistente: `npm install -g pm2 && pm2 start index.js`.
+- Para escanear QR: Sigue las instrucciones en consola.
+- Problemas comunes: Asegúrate de tener permisos de escritura en carpetas.
+
+---
+
+## 📸 Screenshots
+
+<div align="center">
+  <img src="https://example.com/screenshot-menu.png" alt="Menú Principal" width="300" style="margin: 10px;">
+  <img src="https://example.com/screenshot-game.png" alt="Mini-Juego" width="300" style="margin: 10px;">
+</div>
+
+---
+
+## 🤝 Contribuciones
+
+¡Contribuye para hacer Yotsuba aún más genial!  
+1. Fork el repositorio.  
+2. Crea una branch: `git checkout -b feature/nueva-funcion`.  
+3. Commit tus cambios: `git commit -m 'Agrega nueva función'`.  
+4. Push: `git push origin feature/nueva-funcion`.  
+5. Abre un Pull Request.  
+
+Lee [CONTRIBUTING.md](CONTRIBUTING.md) para guías detalladas.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la [MIT License](LICENSE) – ¡usa, modifica y comparte con libertad!
+
+---
+
+<div align="center">
+
+**¡Gracias por unirte a la aventura de Yotsuba! Si te gusta, dale ⭐ en GitHub. ¡Nos vemos en los chats! 💚🌟**
+
+</div>
 ```
