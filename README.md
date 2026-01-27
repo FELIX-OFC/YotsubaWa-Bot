@@ -2,7 +2,7 @@
 
 # 🌸💚 YOTSUBA NAKANO BOT 💚🌸
 
-![Yotsuba Nakano Banner](https://i.pinimg.com/originals/4d/0a/0f/4d0a0f0b0e0f0b0e0f0b0e0f0b0e0f0b.jpg)
+![Yotsuba Nakano Banner](content://media/external/downloads/1000231583)
 
 [![GitHub Stars](https://img.shields.io/github/stars/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=yellow)](https://github.com/FELIX-OFC/Yotsuba-Bot/stargazers)  
 [![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=cyan)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
