@@ -2,7 +2,7 @@
 
 # 🌸💚 YOTSUBA NAKANO BOT 💚🌸
 
-<img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" alt="Yotsuba Nakano Banner" width="800" height="auto">
+![Yotsuba Nakano Banner](https://i.pinimg.com/originals/4d/0a/0f/4d0a0f0b0e0f0b0e0f0b0e0f0b0e0f0b.jpg)
 
 [![GitHub Stars](https://img.shields.io/github/stars/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=yellow)](https://github.com/FELIX-OFC/Yotsuba-Bot/stargazers)  
 [![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=cyan)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
@@ -30,7 +30,7 @@
 ---
 
 <div align="center">
-  <img src="https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4" width="60" height="60">
+  <img src="https://media.tenor.com/images/2hBSkJhJarMAAAPo/hi.mp4" width="60" height="60">
 
   ## 🎉 Mis Superpoderes Kawaii y Potentes 🎉
 </div>
@@ -49,7 +49,7 @@
 ---
 
 <div align="center">
-  <img src="https://media.tenor.com/oylzydvTDV4AAAPo/kusuriya-no-hitorigoto-maomao.mp4" width="60" height="60">
+  <img src="https://media.tenor.com/images/oylzydvTDV4AAAPo/kusuriya-no-hitorigoto-maomao.mp4" width="60" height="60">
 
   ## 📱 ¡Conéctate al Mundo de Yotsuba!
 </div>
