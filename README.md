@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🌸💚 YOTSUBA NAKANO BOT 💚🌸
+# 🌟💚 YOTSUBA NAKANO BOT 💚🌟
 
-![Yotsuba Nakano Banner](https://wallpapercave.com/wp/wp4373001.jpg)
+![Yotsuba Nakano Banner](https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4)
 
 [![GitHub Stars](https://img.shields.io/github/stars/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=yellow)](https://github.com/FELIX-OFC/Yotsuba-Bot/stargazers)  
-[![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=teal)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
+[![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=cyan)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
 [![License](https://img.shields.io/github/license/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=opensourceinitiative&color=green)](https://github.com/FELIX-OFC/Yotsuba-Bot/blob/main/LICENSE)  
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-brightgreen?style=for-the-badge&logo=node.js)](https://nodejs.org/)  
 [![Baileys MD](https://img.shields.io/badge/Baileys-Multi--Device-blue?style=for-the-badge&logo=whatsapp)](https://github.com/WhiskeySockets/Baileys)
@@ -16,30 +16,30 @@
 
 <div align="center">
 
-### ⚡ ¡BIENVENIDO AL MUNDO DE YOTSUBA! ⚡  
-**Bot avanzado para WhatsApp con vibes kawaii y energía infinita. Ejecuta localmente en Termux o VPS – sin hosting externo, sin límites, pura libertad y diversión.**
+### ⚡ ¡BIENVENIDO AL MUNDO KAWAII DE YOTSUBA! ⚡  
+**Bot avanzado para WhatsApp con vibes energéticas y adorables. Ejecuta localmente en Termux o VPS – sin servidores externos, sin límites, 100% libertad y diversión infinita.**
 
 </div>
 
 ---
 
-## 🌟 ¡Hola! Soy Yotsuba Nakano Bot 🌟
+## 🌸 ¡Hola! Soy Yotsuba Nakano Bot 🌸
 
-¡Yayyy! Soy tu bot favorita, inspirada en la chica más alegre y energética del anime. Traigo un estilo kawaii puro: respondo con sonrisas, gestiono grupos con magia, creo stickers adorables, envío saludos radiantes y ofrezco mini-juegos que hacen que cada chat sea una fiesta eterna. Todo es modular, super fácil de personalizar y diseñado para correr sin problemas en tu dispositivo. ¡Únete y hagamos que WhatsApp sea más brillante y divertido juntos! 💚✨
+¡Yayyy! ¡Soy Yotsuba Nakano Bot, tu compañera alegre, energética y siempre lista para aventuras! Inspirada en la chica más kawaii y positiva del anime, traigo un estilo lleno de sonrisas, vitalidad y magia. Gestiono grupos con elegancia, envío saludos radiantes que iluminan el día, creo stickers adorables y ofrezco mini-juegos que convierten cada chat en una fiesta eterna. Todo es modular, super fácil de personalizar y diseñado para correr sin problemas en tu dispositivo. ¡Únete y hagamos que WhatsApp sea más brillante y divertido juntos! 💚✨
 
 ---
 
 <div align="center">
   <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" width="60" height="60">
 
-  ## 🚀 Características Kawaii y Potentes
+  ## 🎉 Mis Superpoderes Kawaii y Potentes 🎉
 </div>
 
 | Estado | Característica | Detalle |
 |:------:|:---------------|:--------|
 | ✅ | **Comandos Sociales** | Saludos radiantes, menús intuitivos y respuestas kawaii que llenan de alegría cualquier chat. |
 | ✅ | **Gestión de Grupos** | Bienvenidas automáticas personalizadas, menciones masivas y moderación suave pero efectiva. |
-| ✅ | **Multimedia Mágica** | Creación de stickers, envío de GIFs/MP4 y descargas rápidas de videos/música con un toque único. |
+| ✅ | **Multimedia Mágica** | Creación de stickers, envío de GIFs/MP4 y descargas rápidas de videos/música con toque único. |
 | ✅ | **Sub-Bots & Plugins** | Soporte para instancias secundarias (JadiBots) y extensión modular sin complicaciones. |
 | ✅ | **Seguridad Máxima** | Anti-spam, anti-enlaces y protección avanzada para mantener todo limpio y seguro. |
 | ✅ | **Juegos & RPG** | Mini-juegos divertidos y sistema RPG con economía, niveles y recompensas para aventuras infinitas. |
@@ -88,8 +88,8 @@ pkg install git nodejs -y             # Termux
 sudo apt install git nodejs -y
 
 # 3. Clona mi repositorio mágico
-git clone https://github.com/FELIX-OFC/YotsubaWa-Bot
-cd YotsubaWa-Bot
+git clone https://github.com/FELIX-OFC/Yotsuba-Bot.git
+cd Yotsuba-Bot
 
 # 4. Instala todas las dependencias con energía
 npm install
