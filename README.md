@@ -30,7 +30,7 @@
 ---
 
 <div align="center">
-  <img src="https://media.tenor.com/images/2hBSkJhJarMAAAPo/hi.mp4" width="60" height="60">
+  <img src="https://imgur.com/gallery/yotsuba-nakano-HgiRHus#Oi1JEch>
 
   ## 🎉 Mis Superpoderes Kawaii y Potentes 🎉
 </div>
