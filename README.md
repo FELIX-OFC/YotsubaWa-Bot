@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🌟💚 YOTSUBA NAKANO BOT 💚🌟
+# 🌸💚 YOTSUBA NAKANO BOT 💚🌸
 
-![Yotsuba Nakano Banner](https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4)
+<img src="https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4" alt="Yotsuba Nakano Banner" width="800">
 
 [![GitHub Stars](https://img.shields.io/github/stars/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=yellow)](https://github.com/FELIX-OFC/Yotsuba-Bot/stargazers)  
 [![GitHub Forks](https://img.shields.io/github/forks/FELIX-OFC/Yotsuba-Bot?style=for-the-badge&logo=github&color=cyan)](https://github.com/FELIX-OFC/Yotsuba-Bot/network)  
@@ -17,20 +17,20 @@
 <div align="center">
 
 ### ⚡ ¡BIENVENIDO AL MUNDO KAWAII DE YOTSUBA! ⚡  
-**Bot avanzado para WhatsApp con vibes energéticas y adorables. Ejecuta localmente en Termux o VPS – sin servidores externos, sin límites, 100% libertad y diversión infinita.**
+**Bot premium para WhatsApp con energía infinita y estilo adorable. Corre 100% local en Termux o VPS – sin hosting externo, sin límites, pura libertad y diversión sin fin.**
 
 </div>
 
 ---
 
-## 🌸 ¡Hola! Soy Yotsuba Nakano Bot 🌸
+## 🌟 ¡Hola! Soy Yotsuba Nakano Bot 🌟
 
-¡Yayyy! ¡Soy Yotsuba Nakano Bot, tu compañera alegre, energética y siempre lista para aventuras! Inspirada en la chica más kawaii y positiva del anime, traigo un estilo lleno de sonrisas, vitalidad y magia. Gestiono grupos con elegancia, envío saludos radiantes que iluminan el día, creo stickers adorables y ofrezco mini-juegos que convierten cada chat en una fiesta eterna. Todo es modular, super fácil de personalizar y diseñado para correr sin problemas en tu dispositivo. ¡Únete y hagamos que WhatsApp sea más brillante y divertido juntos! 💚✨
+¡Yayyy! ¡Soy tu bot favorita, llena de alegría, vitalidad y vibes kawaii! Inspirada en Yotsuba Nakano, traigo un estilo positivo y energético que hace que cada chat sea una fiesta. Gestiono grupos con magia, envío saludos radiantes que iluminan el día, creo stickers adorables y ofrezco mini-juegos emocionantes. Todo es modular, ultra personalizable y optimizado para correr sin problemas en tu dispositivo. ¡Únete y hagamos que WhatsApp sea más brillante, divertido y lleno de sonrisas juntos! 💚✨
 
 ---
 
 <div align="center">
-  <img src="https://i.pinimg.com/originals/73/69/6e/73696e022df7cd5cb3d999c6875361dd.gif" width="60" height="60">
+  <img src="https://media.tenor.com/images/5e5f5e5f5e5f5e5f/tenor.gif" width="60" height="60">
 
   ## 🎉 Mis Superpoderes Kawaii y Potentes 🎉
 </div>
@@ -49,7 +49,7 @@
 ---
 
 <div align="center">
-  <img src="https://i.pinimg.com/originals/19/80/6e/19806e91932e6054965fc83b85241270.gif" width="60" height="60">
+  <img src="https://media.tenor.com/images/5e5f5e5f5e5f5e5f/tenor.gif" width="60" height="60">
 
   ## 📱 ¡Conéctate al Mundo de Yotsuba!
 </div>
