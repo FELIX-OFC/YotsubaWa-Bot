@@ -1,3 +1,4 @@
+
 const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion } = (await import("@whiskeysockets/baileys"))
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
@@ -7,42 +8,63 @@ import pino from 'pino'
 import chalk from 'chalk'
 import util from 'util'
 import * as ws from 'ws'
-const { spawn, exec } = await import('child_process') // <-- removed `child`
+const { spawn, exec } = await import('child_process') // spawn, exec disponibles
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js'
 import { fileURLToPath } from 'url'
+
 let crm1 = "Y2QgcGx1Z2lucy"
 let crm2 = "A7IG1kNXN1b"
 let crm3 = "SBpbmZvLWRvbmFyLmpz"
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz"
 let drm1 = ""
 let drm2 = ""
+
 let rtx = "✿  *Vincula tu cuenta usando el código.*\n\nSigue las instrucciones:\n\n✎ *Mas opciones » Dispositivos vinculados » Vincular nuevo dispositivo » Escanea el código Qr.*\n\n↺ El codigo es valido por 60 segundos."
 let rtx2 = "✿  *Vincula tu cuenta usando el código.*\n\nSigue las instrucciones:\n\n✎ *Mas opciones » Dispositivos vinculados » Vincular nuevo dispositivo » Vincular usando número.*\n\n↺ El codigo es valido por 60 segundos."
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
 const yukiJBOptions = {}
 if (global.conns instanceof Array) console.log()
 else global.conns = []
+
 function isSubBotConnected(jid) { return global.conns.some(sock => sock?.user?.jid && sock.user.jid.split("@")[0] === jid.split("@")[0]) }
+
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
   // normalizar args (si viene string o undefined)
   args = Array.isArray(args) ? args : (typeof args === 'string' && args.trim() ? args.trim().split(/\s+/) : [])
+
+  // protecciones a global.db
+  if (!globalThis.db) globalThis.db = { data: { settings: {}, users: {} } }
+  if (!globalThis.db.data) globalThis.db.data = { settings: {}, users: {} }
+  if (!globalThis.db.data.settings) globalThis.db.data.settings = {}
+  if (!globalThis.db.data.users) globalThis.db.data.users = {}
+
   if (!globalThis.db?.data?.settings?.[conn.user.jid]?.jadibotmd) return m.reply(`ꕥ El Comando *${command}* está desactivado temporalmente.`)
-  let time = (global.db.data.users[m.sender]?.Subs || 0) + 120000
-  if (new Date() - (global.db.data.users[m.sender]?.Subs || 0) < 120000) return conn.reply(m.chat, `ꕥ Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
-  let socklimit = global.conns.filter(sock => sock?.user).length
+
+  // asegurar usuario en DB
+  if (!global.db.data.users[m.sender]) global.db.data.users[m.sender] = {}
+  const lastSubs = global.db.data.users[m.sender].Subs || 0
+  let time = lastSubs + 120000
+  if (Date.now() - lastSubs < 120000) return conn.reply(m.chat, `ꕥ Debes esperar ${msToTime(time - Date.now())} para volver a vincular un *Sub-Bot.*`, m)
+
+  const socklimit = global.conns.filter(sock => sock?.user).length
   if (socklimit >= 50) {
     return m.reply(`ꕥ No se han encontrado espacios para *Sub-Bots* disponibles.`)
   }
+
   let mentionedJid = m.mentionedJid
   let who = mentionedJid && mentionedJid[0] ? mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
   let id = `${who.split('@')[0]}`
   let jadi = 'jadibot'
   let pathYukiJadiBot = path.join(`./${jadi}/`, id)
+
   if (!fs.existsSync(pathYukiJadiBot)){
     fs.mkdirSync(pathYukiJadiBot, { recursive: true })
   }
+
   yukiJBOptions.pathYukiJadiBot = pathYukiJadiBot
   yukiJBOptions.m = m
   yukiJBOptions.conn = conn
@@ -50,27 +72,30 @@ let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
   yukiJBOptions.usedPrefix = usedPrefix
   yukiJBOptions.command = command
   yukiJBOptions.fromCommand = true
+
+  // iniciar el sub-bot (no bloqueo)
   yukiJadiBot(yukiJBOptions)
+
   // guardar timestamp correctamente
-  if (!global.db.data.users[m.sender]) global.db.data.users[m.sender] = {}
   global.db.data.users[m.sender].Subs = Date.now()
 }
+
 handler.help = ['qr', 'code']
 handler.tags = ['serbot']
 handler.command = ['qr', 'code']
 export default handler 
 
 export async function yukiJadiBot(options) {
-  let { pathYukiJadiBot, m, conn, args, usedPrefix, command } = options
+  // recibir options y desestructurar
+  let { pathYukiJadiBot, m, conn, args, usedPrefix, command } = options || {}
   args = Array.isArray(args) ? args : (typeof args === 'string' && args.trim() ? args.trim().split(/\s+/) : [])
+
   // Detectar si es modo code
   let isCodeMode = false
   let codeValue = null
 
-  // Verificar si el comando es 'code' o si hay argumentos que indiquen code mode
   if (command === 'code' || args.some(arg => /code/i.test(arg))) {
     isCodeMode = true
-    // Buscar si hay un valor base64 después de 'code'
     let codeIndex = args.findIndex(arg => /code/i.test(arg))
     if (codeIndex !== -1 && args[codeIndex + 1]) {
       codeValue = args[codeIndex + 1].trim()
@@ -128,15 +153,11 @@ export async function yukiJadiBot(options) {
       sock.isInit = false
       let isInit = true
 
-      // Auto limpieza si no se conecta en 60 segundos
+      // auto limpieza si no se conecta en 60s
       setTimeout(async () => {
         if (!sock.user) {
-          try { 
-            fs.rmSync(pathYukiJadiBot, { recursive: true, force: true }) 
-          } catch {}
-          try { 
-            sock.ws?.close() 
-          } catch {}
+          try { fs.rmSync(pathYukiJadiBot, { recursive: true, force: true }) } catch {}
+          try { sock.ws?.close() } catch {}
           sock.ev.removeAllListeners()
           let i = global.conns.indexOf(sock)
           if (i >= 0) global.conns.splice(i, 1)
@@ -144,6 +165,7 @@ export async function yukiJadiBot(options) {
         }
       }, 60000)
 
+      // helper: espera a que socket esté 'open'
       const waitForSocketOpen = (sock, timeout = 30000) => new Promise((resolve, reject) => {
         try {
           if (sock?.ws?.readyState === 1 || sock?.user) return resolve()
@@ -161,6 +183,9 @@ export async function yukiJadiBot(options) {
           sock.ev.on('connection.update', onUpdate)
         } catch (e) { reject(e) }
       })
+
+      // definir creloadHandler en scope (se asigna más abajo)
+      let creloadHandler
 
       async function connectionUpdate(update) {
         const { connection, lastDisconnect, isNewLogin, qr } = update
@@ -185,6 +210,7 @@ export async function yukiJadiBot(options) {
           return
         } 
 
+        // Modo pairing (code)
         if (qr && isCodeMode) {
           try {
             await waitForSocketOpen(sock, 15000)   // espera que socket esté listo
@@ -207,9 +233,7 @@ export async function yukiJadiBot(options) {
 
         const endSesion = async (loaded) => {
           if (!loaded) {
-            try {
-              sock.ws.close()
-            } catch {}
+            try { sock.ws.close() } catch {}
             sock.ev.removeAllListeners()
             let i = global.conns.indexOf(sock)                
             if (i < 0) return 
@@ -232,7 +256,7 @@ export async function yukiJadiBot(options) {
           if (reason === 440) {
             console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La conexión (+${path.basename(pathYukiJadiBot)}) fue reemplazada por otra sesión activa.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
             try {
-              if (options.fromCommand) {
+              if (options?.fromCommand) {
                 await conn.sendMessage(`${path.basename(pathYukiJadiBot)}@s.whatsapp.net`, { 
                   text: '⚠︎ Hemos detectado una nueva sesión, borre la antigua sesión para continuar.\n\n> ☁︎ Si Hay algún problema vuelva a conectarse.' 
                 }, { quoted: m || null })
@@ -244,7 +268,7 @@ export async function yukiJadiBot(options) {
           if (reason == 405 || reason == 401) {
             console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ La sesión (+${path.basename(pathYukiJadiBot)}) fue cerrada. Credenciales no válidas o dispositivo desconectado manualmente.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
             try {
-              if (options.fromCommand) {
+              if (options?.fromCommand) {
                 await conn.sendMessage(`${path.basename(pathYukiJadiBot)}@s.whatsapp.net`, { 
                   text: '⚠︎ Sesión incorrecta.\n\n> ☁︎ Vuelva a intentar nuevamente volver a ser *SUB-BOT*.' 
                 }, { quoted: m || null })
@@ -256,7 +280,7 @@ export async function yukiJadiBot(options) {
           }
           if (reason === 500) {
             console.log(chalk.bold.magentaBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡\n┆ Conexión perdida en la sesión (+${path.basename(pathYukiJadiBot)}). Borrando datos...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄⟡`))
-            if (options.fromCommand) {
+            if (options?.fromCommand) {
               await conn.sendMessage(`${path.basename(pathYukiJadiBot)}@s.whatsapp.net`, { 
                 text: '⚠︎ Conexión perdida.\n\n> ☁︎ Intenté conectarse manualmente para volver a ser *SUB-BOT*' 
               }, { quoted: m || null })
@@ -272,6 +296,7 @@ export async function yukiJadiBot(options) {
             fs.rmdirSync(pathYukiJadiBot, { recursive: true })
           }
         }
+
         if (global.db.data == null) loadDatabase()
         if (connection == `open`) {
           if (!global.db.data?.users) loadDatabase()
@@ -286,6 +311,7 @@ export async function yukiJadiBot(options) {
         }
       }
 
+      // limpieza periódica
       setInterval(async () => {
         if (!sock.user) {
           try { sock.ws.close() } catch (e) {}
@@ -297,11 +323,12 @@ export async function yukiJadiBot(options) {
         }
       }, 60000)
 
-      let handler = await import('../handler.js')
-      let creloadHandler = async function (restatConn) {
+      // importar handler y definir creloadHandler
+      let handlerMod = await import('../handler.js')
+      creloadHandler = async function (restatConn) {
         try {
           const Handler = await import(`../handler.js?update=${Date.now()}`).catch(console.error)
-          if (Object.keys(Handler || {}).length) handler = Handler
+          if (Object.keys(Handler || {}).length) handlerMod = Handler
         } catch (e) {
           console.error('⚠︎ Nuevo error: ', e)
         }
@@ -317,9 +344,9 @@ export async function yukiJadiBot(options) {
           sock.ev.off("connection.update", sock.connectionUpdate)
           sock.ev.off('creds.update', sock.credsUpdate)
         }
-        sock.handler = handler.handler.bind(sock)
+        sock.handler = handlerMod.handler?.bind(sock)
         sock.connectionUpdate = connectionUpdate.bind(sock)
-        sock.credsUpdate = saveCreds.bind(sock, true)
+        sock.credsUpdate = saveCreds?.bind(sock, true)
         sock.ev.on("messages.upsert", sock.handler)
         sock.ev.on("connection.update", sock.connectionUpdate)
         sock.ev.on("creds.update", sock.credsUpdate)
@@ -327,18 +354,18 @@ export async function yukiJadiBot(options) {
         return true
       }
       creloadHandler(false)
-      
+
     } catch (error) {
       console.error('Error en yukiJadiBot:', error)
-      if (m) {
-        conn.reply(m.chat, `❌ Error al iniciar el Sub-Bot: ${error.message}`, m)
+      if (m && conn) {
+        try { await conn.reply(m.chat, `❌ Error al iniciar el Sub-Bot: ${error.message}`, m) } catch {}
       }
     }
   })
 }
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));}
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 function msToTime(duration) {
   var milliseconds = parseInt((duration % 1000) / 100),
   seconds = Math.floor((duration / 1000) % 60),
@@ -351,7 +378,7 @@ function msToTime(duration) {
 }
 
 async function joinChannels(sock) {
-  for (const value of Object.values(global.ch)) {
+  for (const value of Object.values(global.ch || {})) {
     if (typeof value === 'string' && value.endsWith('@newsletter')) {
       await sock.newsletterFollow(value).catch(() => {})
     }
