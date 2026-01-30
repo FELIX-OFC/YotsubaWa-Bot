@@ -136,13 +136,13 @@ try {
 
   const waitForSocketOpen = (sock, timeout = 60000) => new Promise((resolve, reject) => {
     try {
-      if (sock?.ws?.readyState === 1 || sock?.user) return resolve()
+      if (sock?.ws?.readyState === 1) return resolve()
       const timer = setTimeout(() => {
         sock.ev.off('connection.update', onUpdate)
         reject(new Error('timeout_wait_open'))
       }, timeout)
       function onUpdate(u) {
-        if (u?.connection === 'open' || sock?.user) {
+        if (sock?.ws?.readyState === 1) {
           clearTimeout(timer)
           sock.ev.off('connection.update', onUpdate)
           return resolve()
