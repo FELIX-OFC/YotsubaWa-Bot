@@ -285,14 +285,31 @@ async function processDownload(conn, m, url, title, option) {
   }
 }
 
+/** -------------- FIXED handler.before -------------- **/
 handler.before = async (m, { conn }) => {
   try {
-    // botón de respuesta (varía según versión de baileys/lib)
-    const br = m.message?.buttonsResponseMessage || m.message?.listResponseMessage || null;
-    if (!br) return false;
+    // Diferentes formas en que puede venir la respuesta de un botón/list
+    const msg = m.message || {};
+    const br = msg.buttonsResponseMessage || msg.listResponseMessage || msg.templateButtonReplyMessage || null;
 
-    // en buttonsResponseMessage el id está en selectedButtonId
-    const selectedId = br?.selectedButtonId || br?.selectedId || br?.singleSelectReply?.selectedRowId;
+    let selectedId = null;
+
+    if (br) {
+      // buttonsResponseMessage
+      selectedId = br?.selectedButtonId || br?.singleSelectReply?.selectedRowId || br?.selectedId || br?.selectedButtonId;
+    } else {
+      // fallback: a veces el cliente envía texto literal igual al displayText del botón
+      const text = (m.text || m.message?.conversation || m.message?.extendedTextMessage?.text || '').toString().trim().toLowerCase();
+
+      if (text) {
+        if (text.includes('descargar audio')) selectedId = 'ytdlv2_audio_mp3';
+        else if (text.includes('descargar video')) selectedId = 'ytdlv2_video_mp4';
+        else if (text.includes('audio como documento')) selectedId = 'ytdlv2_audio_doc';
+        else if (text.includes('video como documento')) selectedId = 'ytdlv2_video_doc';
+        // también aceptar variantes sin emoji / con y sin mayúsculas
+      }
+    }
+
     if (!selectedId) return false;
 
     const buttonPatterns = {
@@ -311,8 +328,6 @@ handler.before = async (m, { conn }) => {
       return false;
     }
 
-    console.log(`🎵 Procesando: ${user.lastYTSearch.title}`);
-
     const currentTime = Date.now();
     const searchTime = user.lastYTSearch.timestamp || 0;
     if (currentTime - searchTime > 10 * 60 * 1000) {
@@ -327,15 +342,17 @@ handler.before = async (m, { conn }) => {
       await processDownload(conn, m, user.lastYTSearch.url, user.lastYTSearch.title, option);
       user.lastYTSearch = null;
     } catch (error) {
-      console.error(`❌ Error en descarga:`, error?.message || error);
+      console.error(`❌ Error en descarga (before):`, error?.message || error);
       await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error?.message || error}`, m);
     }
+
     return true;
   } catch (e) {
     console.error('Error en handler.before:', e);
     return false;
   }
 };
+/** -------------------------------------------------- **/
 
 handler.command = handler.help = ['play', 'ytdlv2'];
 handler.tags = ['downloader'];
