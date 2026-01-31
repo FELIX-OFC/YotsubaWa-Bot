@@ -1,55 +1,16 @@
-import fetch from "node-fetch";
+// plugins/ytdlv2.js
+import fetch from "node-fetch"; // v2 recomendado en Termux
 import yts from "yt-search";
 import fs from "fs";
 import path from "path";
+import ytdl from "ytdl-core";
 
-const API_KEY = "Duarte-zz12"; // deja como lo tenías
+const API_KEY = "Duarte-zz12"; // deja tu clave
 
 /* ---------- Helpers ---------- */
 
-async function getAudioFromApis(url) {
-  const apis = [
-    { api: "AlyaBot Play", endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? res.data?.download : null },
-    { api: "AlyaBot v2",   endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
-  ];
-  for (const api of apis) {
-    try {
-      console.log(`🔄 Intentando API audio: ${api.api}`);
-      const r = await fetch(api.endpoint);
-      const j = await r.json();
-      console.log(`📊 Resp audio ${api.api}:`, JSON.stringify(j, null, 2));
-      const dl = api.extractor(j);
-      if (dl && dl.startsWith("http")) return dl;
-    } catch (e) { console.log(`❌ ${api.api} audio falló:`, e.message || e); }
-  }
-  throw new Error("No se encontró URL de audio en las APIs.");
-}
-
-async function getVideoFromApis(url) {
-  const apis = [
-    { api: "AlyaBot Video", endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
-    { api: "API Causas", endpoint: `https://api-causas.duckdns.org/api/v1/descargas/youtube?url=${encodeURIComponent(url)}&type=video&apikey=causa-adc2c572476abdd8`, extractor: res => res?.status ? res.data?.download?.url : null }
-  ];
-  for (const api of apis) {
-    try {
-      console.log(`🔄 Intentando API video: ${api.api}`);
-      const r = await fetch(api.endpoint);
-      const j = await r.json();
-      console.log(`📊 Resp video ${api.api}:`, JSON.stringify(j, null, 2));
-      const dl = api.extractor(j);
-      if (dl && dl.startsWith("http")) return dl;
-    } catch (e) { console.log(`❌ ${api.api} video falló:`, e.message || e); }
-  }
-  throw new Error("No se encontró URL de video en las APIs.");
-}
-
-function extractYouTubeId(url) {
-  const patterns = [/youtu\.be\/([a-zA-Z0-9\-\_]{11})/, /youtube\.com\/watch\?v=([a-zA-Z0-9\-\_]{11})/, /youtube\.com\/shorts\/([a-zA-Z0-9\-\_]{11})/];
-  for (const p of patterns) {
-    const m = url.match(p);
-    if (m) return m[1];
-  }
-  return null;
+function safeFilename(name) {
+  return (name || "yotsuba_file").replace(/[\/\\?%*:|"<>]/g, "").trim().substring(0, 60) || "yotsuba_file";
 }
 
 function formatViews(views) {
@@ -61,19 +22,82 @@ function formatViews(views) {
   return n.toLocaleString();
 }
 
-async function downloadToTmp(url, filenamePrefix) {
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9\-\_]{11})/,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9\-\_]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9\-\_]{11})/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+async function tryJson(endpoint) {
+  const res = await fetch(endpoint, { timeout: 120000 });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function getAudioFromApis(url) {
+  const apis = [
+    { api: "AlyaBot Play", endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? res.data?.download : null },
+    { api: "AlyaBot v2",   endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
+  ];
+  for (const a of apis) {
+    try {
+      console.log(`🔄 Intentando API audio: ${a.api}`);
+      const j = await tryJson(a.endpoint);
+      console.log(`📊 Resp audio ${a.api}:`, j);
+      const dl = a.extractor(j);
+      if (dl && dl.startsWith("http")) return dl;
+      console.log(`❌ ${a.api} no devolvió URL válida`);
+    } catch (e) {
+      console.log(`❌ ${a.api} audio falló:`, e.message || e);
+    }
+  }
+  return null;
+}
+
+async function getVideoFromApis(url) {
+  const apis = [
+    { api: "AlyaBot Video", endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
+    { api: "API Causas", endpoint: `https://api-causas.duckdns.org/api/v1/descargas/youtube?url=${encodeURIComponent(url)}&type=video&apikey=causa-adc2c572476abdd8`, extractor: res => res?.status ? res.data?.download?.url : null }
+  ];
+  for (const a of apis) {
+    try {
+      console.log(`🔄 Intentando API video: ${a.api}`);
+      const j = await tryJson(a.endpoint);
+      console.log(`📊 Resp video ${a.api}:`, j);
+      const dl = a.extractor(j);
+      if (dl && dl.startsWith("http")) return dl;
+      console.log(`❌ ${a.api} no devolvió URL válida`);
+    } catch (e) {
+      console.log(`❌ ${a.api} video falló:`, e.message || e);
+    }
+  }
+  return null;
+}
+
+async function downloadToTmp(url, filenamePrefix, forcedExt = null) {
   const tmpDir = "./tmp";
   if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
-  const tmpPath = path.join(tmpDir, `${filenamePrefix.replace(/\s+/g,'_')}_${Date.now()}`);
-  const res = await fetch(url, { timeout: 120000 });
+  const base = `${filenamePrefix.replace(/\s+/g,'_')}_${Date.now()}`;
+  const res = await fetch(url, { timeout: 180000 });
   if (!res.ok) throw new Error(`Error fetching file: ${res.status} ${res.statusText}`);
-  // try to determine ext from content-type
-  const ct = res.headers.get("content-type") || "";
-  let ext = "";
-  if (ct.includes("audio")) ext = ".mp3";
+  const ct = (res.headers.get("content-type") || "").toLowerCase();
+  let ext = ".bin";
+  if (forcedExt) ext = forcedExt;
+  else if (ct.includes("audio")) ext = ".mp3";
+  else if (ct.includes("mpeg")) ext = ".mp3";
   else if (ct.includes("video")) ext = ".mp4";
-  else ext = path.extname(new URL(url).pathname) || ".bin";
-  const finalPath = tmpPath + ext;
+  else {
+    try { ext = path.extname(new URL(url).pathname) || ".bin"; } catch {}
+  }
+  const finalPath = path.join(tmpDir, base + ext);
   const fileStream = fs.createWriteStream(finalPath);
   await new Promise((resolve, reject) => {
     res.body.pipe(fileStream);
@@ -83,14 +107,36 @@ async function downloadToTmp(url, filenamePrefix) {
   return finalPath;
 }
 
+function isLikelyMp3(filePath) {
+  try {
+    const fd = fs.openSync(filePath, 'r');
+    const buf = Buffer.alloc(3);
+    fs.readSync(fd, buf, 0, 3, 0);
+    fs.closeSync(fd);
+    // ID3 tag or frame sync 0xFF 0xFB
+    return buf.slice(0,3).toString() === "ID3" || (buf[0] === 0xFF && (buf[1] & 0xE0) === 0xE0);
+  } catch (e) {
+    return false;
+  }
+}
+
+async function downloadAudioWithYtdl(url, outPath) {
+  return new Promise((resolve, reject) => {
+    const stream = ytdl(url, { filter: 'audioonly', quality: 'highestaudio' });
+    const ws = fs.createWriteStream(outPath);
+    stream.pipe(ws);
+    stream.on('error', (err) => { try{ ws.close() }catch{}; reject(err); });
+    ws.on('finish', () => resolve(outPath));
+    ws.on('error', reject);
+  });
+}
+
 /* ---------- Handler principal ---------- */
 
 const handler = async (m, { conn, text = "", usedPrefix = ".", command = "play" }) => {
   try {
     text = (text || "").trim();
-    if (!text) {
-      return conn.reply(m.chat, `🍀 Solo Yotsuba 🍀\n\nUsa: ${usedPrefix}${command} <nombre o link>\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
-    }
+    if (!text) return conn.reply(m.chat, `🍀 Solo Yotsuba 🍀\n\nUsa: ${usedPrefix}${command} <nombre o link>`, m);
 
     let url = "";
     let videoInfo;
@@ -131,7 +177,6 @@ const handler = async (m, { conn, text = "", usedPrefix = ".", command = "play" 
 
     const footer = "🍀 Solo Yotsuba";
 
-    // intenta enviar miniatura con tu método de carousel/plantilla
     try {
       const thumb = thumbnail ? (await conn.getFile(thumbnail))?.data : null;
       await conn.sendNCarousel?.(m.chat, infoText, footer, thumb, buttons, null, null, null, m);
@@ -140,7 +185,7 @@ const handler = async (m, { conn, text = "", usedPrefix = ".", command = "play" 
       catch { await conn.reply(m.chat, infoText + "\n\n" + footer, m); }
     }
 
-    // guarda búsqueda para el usuario
+    // guarda búsqueda
     if (!global.db) global.db = { data: { users: {} } };
     if (!global.db.data) global.db.data = { users: {} };
     if (!global.db.data.users[m.sender]) global.db.data.users[m.sender] = {};
@@ -155,37 +200,58 @@ const handler = async (m, { conn, text = "", usedPrefix = ".", command = "play" 
 /* ---------- Proceso de descarga y envío ---------- */
 
 async function processDownload(conn, m, url, title, option) {
-  // option: 1 = audio mp3, 2 = video mp4
-  const safeName = (title || "yotsuba_file").replace(/[\/\\?%*:|"<>]/g, "").trim().substring(0, 60) || "yotsuba_file";
-
+  const safeName = safeFilename(title);
   try {
     if (option === 1) {
-      // audio -> obtener URL y descargar localmente y enviar como audio
-      const dlUrl = await getAudioFromApis(url);
-      if (!dlUrl) throw new Error("No se obtuvo URL de audio.");
-      const tmpPath = await downloadToTmp(dlUrl, safeName);
-      await conn.sendMessage(m.chat, { audio: fs.createReadStream(tmpPath), mimetype: "audio/mpeg", fileName: `${safeName}.mp3`, ptt: false }, { quoted: m });
-      try { await fs.promises.unlink(tmpPath); } catch(e) {}
+      // audio mp3: primero APIs, si falla -> ytdl
+      let dlUrl = await getAudioFromApis(url);
+      let tmpPath = null;
+
+      if (dlUrl) {
+        try {
+          tmpPath = await downloadToTmp(dlUrl, safeName, ".mp3"); // forzamos .mp3 si la API devolvió URL
+        } catch (e) {
+          console.log("Error descargando desde API audio:", e.message || e);
+          tmpPath = null;
+        }
+      }
+
+      // si tmpPath existe, validar que sea mp3
+      if (tmpPath && isLikelyMp3(tmpPath)) {
+        await conn.sendMessage(m.chat, { audio: fs.createReadStream(tmpPath), mimetype: "audio/mpeg", fileName: `${safeName}.mp3`, ptt: false }, { quoted: m });
+        try { await fs.promises.unlink(tmpPath); } catch {}
+        return true;
+      }
+
+      // fallback con ytdl (descarga directa desde YouTube)
+      const videoId = extractYouTubeId(url) || (await yts(url)).all?.[0]?.videoId;
+      if (!videoId) throw new Error("No se pudo extraer videoId para ytdl fallback.");
+      const ytdlUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const outPath = path.join("./tmp", `${safeName}_${Date.now()}.mp3`);
+      console.log("Fallback: descargando audio con ytdl-core...");
+      await downloadAudioWithYtdl(ytdlUrl, outPath);
+      if (!isLikelyMp3(outPath)) throw new Error("ytdl generó un archivo que no parece MP3.");
+      await conn.sendMessage(m.chat, { audio: fs.createReadStream(outPath), mimetype: "audio/mpeg", fileName: `${safeName}.mp3`, ptt: false }, { quoted: m });
+      try { await fs.promises.unlink(outPath); } catch {}
       return true;
+
     } else {
-      // video -> preferir enviar por URL; si falla, descargar y enviar
+      // video mp4: intentamos APIs y enviamos por URL si posible, si no, descargamos y enviamos
       const dlUrl = await getVideoFromApis(url);
       if (!dlUrl) throw new Error("No se obtuvo URL de video.");
-      // intenta enviar por URL
       try {
         await conn.sendMessage(m.chat, { video: { url: dlUrl }, mimetype: "video/mp4", fileName: `${safeName}.mp4`, caption: `🎬 ${title}` }, { quoted: m });
         return true;
-      } catch (sendErr) {
-        console.log("Envio por URL falló, descargando localmente...:", sendErr.message || sendErr);
-        const tmpPath = await downloadToTmp(dlUrl, safeName);
-        // intenta enviar como video (stream)
+      } catch (err) {
+        console.log("Envio por URL falló, descargando localmente...:", err.message || err);
+        const tmpPath = await downloadToTmp(dlUrl, safeName, ".mp4");
         try {
           await conn.sendMessage(m.chat, { video: fs.createReadStream(tmpPath), mimetype: "video/mp4", fileName: `${safeName}.mp4`, caption: `🎬 ${title}` }, { quoted: m });
-        } catch (e) {
-          // fallback: enviar como documento
+        } catch (err2) {
+          console.log("Envio local video falló, enviando como documento...", err2.message || err2);
           await conn.sendMessage(m.chat, { document: fs.createReadStream(tmpPath), mimetype: "video/mp4", fileName: `${safeName}.mp4`, caption: `🎬 ${title}` }, { quoted: m });
         }
-        try { await fs.promises.unlink(tmpPath); } catch(e) {}
+        try { await fs.promises.unlink(tmpPath); } catch {}
         return true;
       }
     }
