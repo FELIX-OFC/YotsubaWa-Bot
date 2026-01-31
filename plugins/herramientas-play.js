@@ -5,8 +5,8 @@ const API_KEY = 'Duarte-zz12'; // deja como está si es tu key
 
 async function getAudioFromApis(url) {
   const apis = [
-    { api: 'AlyaBot Play', endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=\( {encodeURIComponent(url)}&key= \){API_KEY}`, extractor: res => res?.status ? (res.data?.download || res.data?.dl || res.data?.url) : null },
-    { api: 'AlyaBot v2', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=\( {encodeURIComponent(url)}&key= \){API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
+    { api: 'AlyaBot Play', endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.download || res.data?.dl || res.data?.url) : null },
+    { api: 'AlyaBot v2', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
   ];
 
   for (const api of apis) {
@@ -31,7 +31,7 @@ async function getAudioFromApis(url) {
 
 async function getVideoFromApis(url) {
   const apis = [
-    { api: 'AlyaBot Video', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=\( {encodeURIComponent(url)}&key= \){API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
+    { api: 'AlyaBot Video', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
     { api: 'API Causas', endpoint: `https://api-causas.duckdns.org/api/v1/descargas/youtube?url=${encodeURIComponent(url)}&type=video&apikey=causa-adc2c572476abdd8`, extractor: res => res?.status ? (res.data?.download?.url || res.data?.download) : null }
   ];
 
@@ -86,7 +86,7 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
   try {
     text = (text || '').trim();
     if (!text) {
-      return conn.reply(m.chat, `🍀 YOTSUBA NAKANO 🍀\n\nIngresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: \( {usedPrefix} \){command} Let you Down Cyberpunk`, m);
+      return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
     }
 
     let videoInfo = null;
@@ -148,17 +148,17 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
-    const infoText = `🍀🍀🍀 YOTSUBA NAKANO 🍀🍀🍀
+    const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
 
-🌟 *Título:* ${title}
-🍀 *Duración:* ${timestamp}
-🌟 *Vistas:* ${vistas}
-🍀 *Canal:* ${canal}
-🌟 *Publicado:* ${ago}
+> 🍀 *Título:* ${title}
+> 🌟 *Duración:* ${timestamp}
+> 🍀 *Vistas:* ${vistas}
+> 🌟 *Canal:* ${canal}
+> 🍀 *Publicado:* ${ago}
 
-🍀 Selecciona el formato para descargar 🌟`;
+🌟 *Selecciona el formato para descargar:*`;
 
-    const footer = '🍀🍀 Yotsuba Bot - Descargador de YouTube Premium 🍀🍀';
+    const footer = '🍀 Yotsuba Bot - Descargador de YouTube';
 
     // Enviar carousel (si la función existe en tu conn). Si falla, enviamos texto con botones simples.
     try {
@@ -237,14 +237,14 @@ async function processDownload(conn, m, url, title, option) {
       if (option === 1) {
         await conn.sendMessage(m.chat, {
           audio: { url: downloadUrl },
-          mimetype: 'audio/mp3',
+          mimetype: 'audio/mpeg',
           fileName,
           ptt: false
         }, { quoted: m });
       } else {
         await conn.sendMessage(m.chat, {
           document: { url: downloadUrl },
-          mimetype: 'audio/mp3',
+          mimetype: 'audio/mpeg',
           fileName
         }, { quoted: m });
       }
@@ -265,6 +265,16 @@ async function processDownload(conn, m, url, title, option) {
           caption: `📁 ${title}`
         }, { quoted: m });
       }
+    }
+
+    // Aplicar coste si procede
+    if (!global.db) global.db = { data: { users: {} } };
+    if (!global.db.data.users) global.db.data.users = {};
+    const user = global.getUser ? global.getUser(m.sender) : (global.db.data.users[m.sender] || (global.db.data.users[m.sender] = {}));
+    if (user && !user.monedaDeducted) {
+      user.moneda = (user.moneda || 0) - 2;
+      user.monedaDeducted = true;
+      conn.reply(m.chat, `🍀 Has utilizado 2 *Tréboles 🌟*`, m);
     }
 
     return true;
@@ -325,6 +335,8 @@ handler.before = async (m, { conn }) => {
       user.lastYTSearch = null;
       return false;
     }
+
+    user.monedaDeducted = false;
 
     try {
       await processDownload(conn, m, user.lastYTSearch.url, user.lastYTSearch.title, option);
