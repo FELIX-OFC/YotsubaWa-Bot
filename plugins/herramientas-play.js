@@ -148,17 +148,17 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
-    const infoText = `🍀🍀🍀 YOTSUBA NAKANO 🍀🍀🍀
+    const infoText = `*🍀✿⃘࣪◌ ֪  YOTSUBA NAKANO  ✿⃘࣪◌ ֪🍀*
 
-🌟 *Título:* ${title}
-🍀 *Duración:* ${timestamp}
-🌟 *Vistas:* ${vistas}
-🍀 *Canal:* ${canal}
-🌟 *Publicado:* ${ago}
+> 🌟 *Título:* ${title}
+> 🍀 *Duración:* ${timestamp}
+> 🌟 *Vistas:* ${vistas}
+> 🍀 *Canal:* ${canal}
+> 🌟 *Publicado:* ${ago}
 
 🍀 Selecciona el formato para descargar 🌟`;
 
-    const footer = '🍀🍀 Yotsuba Bot - Descargador de YouTube Premium 🍀🍀';
+    const footer = '🍀 Yotsuba Bot - Descargador de YouTube 🍀';
 
     // Enviar carousel (si la función existe en tu conn). Si falla, enviamos texto con botones simples.
     try {
@@ -238,14 +238,14 @@ async function processDownload(conn, m, url, title, query, option) {
       if (option === 1) {
         await conn.sendMessage(m.chat, {
           audio: { url: downloadUrl },
-          mimetype: 'audio/mpeg',
+          mimetype: 'audio/mp3',
           fileName,
           ptt: false
         }, { quoted: m });
       } else {
         await conn.sendMessage(m.chat, {
           document: { url: downloadUrl },
-          mimetype: 'audio/mpeg',
+          mimetype: 'audio/mp3',
           fileName
         }, { quoted: m });
       }
