@@ -1,3 +1,4 @@
+```javascript
 import fetch from "node-fetch";
 import yts from 'yt-search';
 
@@ -12,14 +13,14 @@ async function getAudioFromApis(url) {
 
   for (const api of apis) {
     try {
-      console.log(`🔄 Trying API: ${api.api}`);
+      console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 API response:`, JSON.stringify(data, null, 2));
+      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
 
       const downloadUrl = api.extractor(data);
       if (downloadUrl && downloadUrl.startsWith('http')) {
-        console.log(`✅ API exitoso: ${api.api}, URL: ${downloadUrl}`);
+        console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
@@ -41,14 +42,14 @@ async function getVideoFromApis(url) {
 
   for (const api of apis) {
     try {
-      console.log(`🔄 Trying API: ${api.api}`);
+      console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 API response:`, JSON.stringify(data, null, 2));
+      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
 
       const downloadUrl = api.extractor(data);
       if (downloadUrl && downloadUrl.startsWith('http')) {
-        console.log(`✅ API exitoso: ${api.api}, URL: ${downloadUrl}`);
+        console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
@@ -98,7 +99,7 @@ function formatViews(views) {
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text.trim()) {
-      return conn.reply(m.chat, `💙HATSUNE MIKU💙\n\n💙 Ingresa el nombre de la música o URL de YouTube a descargar.\n\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
+      return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
     }
 
     let videoInfo;
@@ -148,28 +149,28 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const canal = author.name || 'Desconocido';
 
     const buttons = [
-      ['🎵 Audio MP3', 'ytdlv2_audio_mp3'],
-      ['🎬 Video MP4', 'ytdlv2_video_mp4'],
-      ['📁 MP3 Documento', 'ytdlv2_audio_doc'],
-      ['📁 MP4 Documento', 'ytdlv2_video_doc']
+      ['🎵 Descargar Audio', 'ytdlv2_audio_mp3'],
+      ['🎬 Descargar Video', 'ytdlv2_video_mp4'],
+      ['📁 Audio como Documento', 'ytdlv2_audio_doc'],
+      ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
-    const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ💙𝗠𝗶𝗸𝘂𝗺𝗶𝗻🌱ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
+    const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
 
-> 💙 *Título:* ${title}
+> 🍀 *Título:* ${title}
 *°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
-> 🌱 *Duración:* ${timestamp}
+> 🌟 *Duración:* ${timestamp}
 *°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
-> 💙 *Vistas:* ${vistas}
+> 🍀 *Vistas:* ${vistas}
 *°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
-> 🌱 *Canal:* ${canal}
+> 🌟 *Canal:* ${canal}
 *°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
-> 💙 *Publicado:* ${ago}
+> 🍀 *Publicado:* ${ago}
 *⏝ּׅ︣︢ۛ۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣ׄۛ۫۫۫۫۫ۜ*
 
-💌 *Selecciona el formato para descargar:*`;
+🌟 *Selecciona el formato para descargar:*`;
 
-    const footer = '🌱 Hatsune Miku Bot - YouTube';
+    const footer = '🍀 Yotsuba Bot - Descargador de YouTube';
 
     try {
       const thumb = thumbnail ? (await conn.getFile(thumbnail))?.data : null;
@@ -189,7 +190,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
   } catch (error) {
     console.error("Error completo:", error);
-    return m.reply(`💙 Ocurrió un error: ${error.message || 'Desconocido'}`);
+    return m.reply(`🍀 Ocurrió un error inesperado: ${error.message || 'Desconocido'}`);
   }
 };
 
@@ -202,7 +203,7 @@ async function processDownload(conn, m, url, title, option) {
   };
 
   const downloadType = downloadTypes[option] || 'archivo';
-  await conn.reply(m.chat, `💙 Obteniendo ${downloadType}... ⚡`, m);
+  await conn.reply(m.chat, `🍀 Preparando ${downloadType}... 🌟`, m);
 
   try {
     const isVideo = option === 2 || option === 4;
@@ -215,7 +216,7 @@ async function processDownload(conn, m, url, title, option) {
       downloadUrl = await getAudioFromApis(url);
     }
 
-    console.log(`✅ API exitoso, URL: ${downloadUrl}`);
+    console.log(`✅ Descarga lista, URL: ${downloadUrl}`);
 
     let fileName = `${title.replace(/[^\w\s]/gi, '').substring(0, 50)}`;
 
@@ -260,87 +261,68 @@ async function processDownload(conn, m, url, title, option) {
     if (user && !user.monedaDeducted) {
       user.moneda = (user.moneda || 0) - 2;
       user.monedaDeducted = true;
-      conn.reply(m.chat, `💙 Has utilizado 2 *Cebollines 🌱*`, m);
+      conn.reply(m.chat, `🍀 Has utilizado 2 *Tréboles 🌟*`, m);
     }
 
     return true;
   } catch (error) {
     console.error("Error al procesar descarga:", error);
-    conn.reply(m.chat, `💙 Error: ${error.message}`, m);
+    conn.reply(m.chat, `🍀 Error en la descarga: ${error.message}`, m);
     return false;
   }
 }
 
 handler.before = async (m, { conn }) => {
-  const buttonPatterns = [
-    /ytdlv2_audio_mp3/,
-    /ytdlv2_video_mp4/,
-    /ytdlv2_audio_doc/,
-    /ytdlv2_video_doc/
-  ];
+  if (m.message?.buttonsResponseMessage) {
+    const selectedId = m.message.buttonsResponseMessage.selectedButtonId;
+    const buttonPatterns = {
+      'ytdlv2_audio_mp3': 1,
+      'ytdlv2_video_mp4': 2,
+      'ytdlv2_audio_doc': 3,
+      'ytdlv2_video_doc': 4
+    };
 
-  let isButtonResponse = false;
-  for (const pattern of buttonPatterns) {
-    if (pattern.test(m.text)) {
-      isButtonResponse = true;
-      break;
+    const option = buttonPatterns[selectedId];
+    if (!option) return false;
+
+    const user = global.db.data.users[m.sender];
+    if (!user || !user.lastYTSearch) {
+      await conn.reply(m.chat, '⏰ No hay búsqueda activa. Realiza una nueva búsqueda.', m);
+      return false;
     }
+
+    console.log(`🎵 Procesando: ${user.lastYTSearch.title}`);
+
+    const currentTime = Date.now();
+    const searchTime = user.lastYTSearch.timestamp || 0;
+
+    if (currentTime - searchTime > 10 * 60 * 1000) {
+      await conn.reply(m.chat, '⏰ La búsqueda ha expirado. Por favor realiza una nueva búsqueda.', m);
+      return false; 
+    }
+
+    user.monedaDeducted = false;
+
+    try {
+      await processDownload(
+        conn, 
+        m, 
+        user.lastYTSearch.url, 
+        user.lastYTSearch.title, 
+        option
+      );
+
+      user.lastYTSearch = null;
+
+    } catch (error) {
+      console.error(`❌ Error en descarga:`, error.message);
+      await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error.message}`, m);
+    }
+
+    return true;
   }
 
-  if (!isButtonResponse) {
-    return false;
-  }
-
-  const user = global.db.data.users[m.sender];
-  if (!user || !user.lastYTSearch) {
-    await conn.reply(m.chat, '⏰ No hay búsqueda activa. Realiza una nueva búsqueda.', m);
-    return false;
-  }
-
-  console.log(`🎵 Procesando: ${user.lastYTSearch.title}`);
-
-  const currentTime = Date.now();
-  const searchTime = user.lastYTSearch.timestamp || 0;
-
-  if (currentTime - searchTime > 10 * 60 * 1000) {
-    await conn.reply(m.chat, '⏰ La búsqueda ha expirado. Por favor realiza una nueva búsqueda.', m);
-    return false; 
-  }
-
-  let option = null;
-  if (m.text.includes('audio_mp3')) {
-    option = 1; 
-  } else if (m.text.includes('video_mp4')) {
-    option = 2; 
-  } else if (m.text.includes('audio_doc')) {
-    option = 3; 
-  } else if (m.text.includes('video_doc')) {
-    option = 4; 
-  }
-
-  if (!option) {
-    return false;
-  }
-
-  user.monedaDeducted = false;
-
-  try {
-    await processDownload(
-      conn, 
-      m, 
-      user.lastYTSearch.url, 
-      user.lastYTSearch.title, 
-      option
-    );
-
-    user.lastYTSearch = null;
-
-  } catch (error) {
-    console.error(`❌ Error en descarga:`, error.message);
-    await conn.reply(m.chat, `💙 Error al procesar la descarga: ${error.message}`, m);
-  }
-
-  return true;
+  return false;
 };
 
 handler.command = handler.help = ['play', 'ytdlv2'];
@@ -348,3 +330,4 @@ handler.tags = ['downloader'];
 handler.register = true;
 
 export default handler;
+```
