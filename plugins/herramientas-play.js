@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import yts from 'yt-search';
 
-const API_KEY = 'Duarte-zz12'; // deja como está si es tu key
+const API_KEY = process.env.ALYA_API_KEY || 'Duarte-zz12'; // Reemplaza si no es tu key
 
 async function getAudioFromApis(url) {
   const apis = [
@@ -86,24 +86,20 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
   try {
     text = (text || '').trim();
     if (!text) {
-      return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
+      return conn.reply(m.chat, `🍀 SOLO YOTSUBA 🍀\n\nEnvía el nombre o URL del video/canción. Ejemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
     }
 
     let videoInfo = null;
     let url = '';
 
-    // Si parece una url de youtube, usa la URL directamente
     const isYouTubeUrl = /youtube\.com|youtu\.be/i.test(text);
 
     if (isYouTubeUrl) {
       url = text;
-      // yts acepta url o texto, intentamos con la url
       const search = await yts(url);
-      // Priorizar videos array
       if (search) {
         videoInfo = (search.videos && search.videos.find(v => v.url && v.url.includes(extractYouTubeId(url) || ''))) || (search.all && search.all.find(v => v.videoId && url.includes(v.videoId))) || (search.videos && search.videos[0]) || (search.all && search.all[0]) || null;
       }
-      // Si no lo encontró, intentar buscar por id
       if (!videoInfo) {
         const id = extractYouTubeId(url);
         if (id) {
@@ -112,12 +108,10 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
         }
       }
     } else {
-      // Búsqueda por texto
       const search = await yts(text);
       if (!search || ((!search.videos || search.videos.length === 0) && (!search.all || search.all.length === 0))) {
         return conn.reply(m.chat, 'No se encontraron resultados para tu búsqueda.', m);
       }
-      // Prefer videos list
       videoInfo = (search.videos && search.videos[0]) || (search.all && search.all[0]);
       url = videoInfo?.url || url;
     }
@@ -126,7 +120,6 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       return conn.reply(m.chat, 'No se pudo obtener información del video.', m);
     }
 
-    // Normalizar campos
     const title = videoInfo.title || 'Desconocido';
     const thumbnail = videoInfo.thumbnail || videoInfo.image || '';
     const timestamp = videoInfo.timestamp || videoInfo.duration || 'Desconocido';
@@ -148,34 +141,29 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
-    const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
+    const infoText = `🌿 *SOLO YOTSUBA* 🌿
 
-> 🍀 *Título:* ${title}
-> 🌟 *Duración:* ${timestamp}
-> 🍀 *Vistas:* ${vistas}
-> 🌟 *Canal:* ${canal}
-> 🍀 *Publicado:* ${ago}
+*Título:* ${title}
+*Duración:* ${timestamp}
+*Vistas:* ${vistas}
+*Canal:* ${canal}
+*Publicado:* ${ago}
 
-🌟 *Selecciona el formato para descargar:*`;
+Selecciona el formato para descargar:`;
 
-    const footer = '🍀 Yotsuba Bot - Descargador de YouTube';
+    const footer = '🌿 Solo Yotsuba - Descargador';
 
-    // Enviar carousel (si la función existe en tu conn). Si falla, enviamos texto con botones simples.
     try {
       let thumb = null;
       if (thumbnail) {
         try {
           const file = await conn.getFile(thumbnail).catch(() => null);
           thumb = file?.data || null;
-        } catch (e) {
-          thumb = null;
-        }
+        } catch (e) { thumb = null; }
       }
-      // sendNCarousel puede ser una función personalizada; mantenla si la usas
       if (typeof conn.sendNCarousel === 'function') {
         await conn.sendNCarousel(m.chat, infoText, footer, thumb, buttons, null, null, null, m);
       } else {
-        // fallback: enviar texto y botones como reply
         const btnsForReply = buttons.map(b => ({ buttonId: b[1], buttonText: { displayText: b[0] }, type: 1 }));
         await conn.sendMessage(m.chat, { text: infoText + '\n\n' + footer, buttons: btnsForReply, headerType: 1 }, { quoted: m });
       }
@@ -185,7 +173,6 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       await conn.sendMessage(m.chat, { text: infoText + '\n\n' + footer, buttons: btnsForReply, headerType: 1 }, { quoted: m });
     }
 
-    // Guardar búsqueda en la DB del usuario (asegurar estructura)
     if (!global.db) global.db = { data: { users: {} } };
     if (!global.db.data) global.db.data = { users: {} };
     if (!global.db.data.users) global.db.data.users = {};
@@ -201,7 +188,7 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
     return;
   } catch (error) {
     console.error("Error completo:", error);
-    return conn.reply(m.chat, `🍀 Ocurrió un error inesperado: ${error?.message || 'Desconocido'}`, m);
+    return conn.reply(m.chat, `Ocurrió un error: ${error?.message || 'Desconocido'}`, m);
   }
 };
 
@@ -213,7 +200,7 @@ async function processDownload(conn, m, url, title, option) {
     4: '📁 video MP4 doc'
   };
   const downloadType = downloadTypes[option] || 'archivo';
-  await conn.reply(m.chat, `🍀 Preparando ${downloadType}... 🌟`, m);
+  await conn.reply(m.chat, `Preparando ${downloadType}...`, m);
 
   try {
     const isVideo = option === 2 || option === 4;
@@ -227,27 +214,19 @@ async function processDownload(conn, m, url, title, option) {
 
     console.log(`✅ Descarga lista, URL: ${downloadUrl}`);
 
-    // Sanea el nombre
     let safeName = (title || 'yotsuba_file').replace(/[\/\\<>:"|?*\x00-\x1F]/g, '').trim();
     if (!safeName) safeName = 'yotsuba_file';
     safeName = safeName.substring(0, 60);
 
+    // IMPORTANTE: para evitar "archivo no existe" enviamos audio como documento (más compatible con URLs remotas)
     if (option === 1 || option === 3) {
       const fileName = `${safeName}.mp3`;
-      if (option === 1) {
-        await conn.sendMessage(m.chat, {
-          audio: { url: downloadUrl },
-          mimetype: 'audio/mpeg',
-          fileName,
-          ptt: false
-        }, { quoted: m });
-      } else {
-        await conn.sendMessage(m.chat, {
-          document: { url: downloadUrl },
-          mimetype: 'audio/mpeg',
-          fileName
-        }, { quoted: m });
-      }
+      await conn.sendMessage(m.chat, {
+        document: { url: downloadUrl },
+        fileName,
+        mimetype: 'audio/mpeg',
+        caption: option === 3 ? `📁 ${title}` : undefined
+      }, { quoted: m });
     } else {
       const fileName = `${safeName}.mp4`;
       if (option === 2) {
@@ -267,46 +246,33 @@ async function processDownload(conn, m, url, title, option) {
       }
     }
 
-    // Aplicar coste si procede
-    if (!global.db) global.db = { data: { users: {} } };
-    if (!global.db.data.users) global.db.data.users = {};
-    const user = global.getUser ? global.getUser(m.sender) : (global.db.data.users[m.sender] || (global.db.data.users[m.sender] = {}));
-    if (user && !user.monedaDeducted) {
-      user.moneda = (user.moneda || 0) - 2;
-      user.monedaDeducted = true;
-      conn.reply(m.chat, `🍀 Has utilizado 2 *Tréboles 🌟*`, m);
-    }
+    // no se aplican monedas / tréboles (removido)
 
     return true;
   } catch (error) {
     console.error("Error al procesar descarga:", error);
-    try { await conn.reply(m.chat, `🍀 Error en la descarga: ${error?.message || error}`, m); } catch {}
+    try { await conn.reply(m.chat, `Error en la descarga: ${error?.message || error}`, m); } catch {}
     return false;
   }
 }
 
-/** -------------- FIXED handler.before -------------- **/
+/** handler.before mejorado para detectar botones/list/respuestas por texto */
 handler.before = async (m, { conn }) => {
   try {
-    // Diferentes formas en que puede venir la respuesta de un botón/list
     const msg = m.message || {};
     const br = msg.buttonsResponseMessage || msg.listResponseMessage || msg.templateButtonReplyMessage || null;
 
     let selectedId = null;
 
     if (br) {
-      // buttonsResponseMessage
       selectedId = br?.selectedButtonId || br?.singleSelectReply?.selectedRowId || br?.selectedId || br?.selectedButtonId;
     } else {
-      // fallback: a veces el cliente envía texto literal igual al displayText del botón
       const text = (m.text || m.message?.conversation || m.message?.extendedTextMessage?.text || '').toString().trim().toLowerCase();
-
       if (text) {
         if (text.includes('descargar audio')) selectedId = 'ytdlv2_audio_mp3';
         else if (text.includes('descargar video')) selectedId = 'ytdlv2_video_mp4';
         else if (text.includes('audio como documento')) selectedId = 'ytdlv2_audio_doc';
         else if (text.includes('video como documento')) selectedId = 'ytdlv2_video_doc';
-        // también aceptar variantes sin emoji / con y sin mayúsculas
       }
     }
 
@@ -336,14 +302,12 @@ handler.before = async (m, { conn }) => {
       return false;
     }
 
-    user.monedaDeducted = false;
-
     try {
       await processDownload(conn, m, user.lastYTSearch.url, user.lastYTSearch.title, option);
       user.lastYTSearch = null;
     } catch (error) {
       console.error(`❌ Error en descarga (before):`, error?.message || error);
-      await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error?.message || error}`, m);
+      await conn.reply(m.chat, `Error al procesar la descarga: ${error?.message || error}`, m);
     }
 
     return true;
@@ -352,7 +316,6 @@ handler.before = async (m, { conn }) => {
     return false;
   }
 };
-/** -------------------------------------------------- **/
 
 handler.command = handler.help = ['play', 'ytdlv2'];
 handler.tags = ['downloader'];
