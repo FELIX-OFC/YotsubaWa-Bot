@@ -169,7 +169,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
 🌟 *Selecciona el formato para descargar:*`;
 
-    const footer = '🍀 Yotsuba Nakano Bot - YouTube Downloader';
+    const footer = '🍀 Yotsuba Bot - Descargador de YouTube';
 
     try {
       const thumb = thumbnail ? (await conn.getFile(thumbnail))?.data : null;
@@ -272,75 +272,56 @@ async function processDownload(conn, m, url, title, option) {
 }
 
 handler.before = async (m, { conn }) => {
-  const buttonPatterns = [
-    /ytdlv2_audio_mp3/,
-    /ytdlv2_video_mp4/,
-    /ytdlv2_audio_doc/,
-    /ytdlv2_video_doc/
-  ];
+  if (m.message?.buttonsResponseMessage) {
+    const selectedId = m.message.buttonsResponseMessage.selectedButtonId;
+    const buttonPatterns = {
+      'ytdlv2_audio_mp3': 1,
+      'ytdlv2_video_mp4': 2,
+      'ytdlv2_audio_doc': 3,
+      'ytdlv2_video_doc': 4
+    };
 
-  let isButtonResponse = false;
-  for (const pattern of buttonPatterns) {
-    if (pattern.test(m.text)) {
-      isButtonResponse = true;
-      break;
+    const option = buttonPatterns[selectedId];
+    if (!option) return false;
+
+    const user = global.db.data.users[m.sender];
+    if (!user || !user.lastYTSearch) {
+      await conn.reply(m.chat, '⏰ No hay búsqueda activa. Realiza una nueva búsqueda.', m);
+      return false;
     }
+
+    console.log(`🎵 Procesando: ${user.lastYTSearch.title}`);
+
+    const currentTime = Date.now();
+    const searchTime = user.lastYTSearch.timestamp || 0;
+
+    if (currentTime - searchTime > 10 * 60 * 1000) {
+      await conn.reply(m.chat, '⏰ La búsqueda ha expirado. Por favor realiza una nueva búsqueda.', m);
+      return false; 
+    }
+
+    user.monedaDeducted = false;
+
+    try {
+      await processDownload(
+        conn, 
+        m, 
+        user.lastYTSearch.url, 
+        user.lastYTSearch.title, 
+        option
+      );
+
+      user.lastYTSearch = null;
+
+    } catch (error) {
+      console.error(`❌ Error en descarga:`, error.message);
+      await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error.message}`, m);
+    }
+
+    return true;
   }
 
-  if (!isButtonResponse) {
-    return false;
-  }
-
-  const user = global.db.data.users[m.sender];
-  if (!user || !user.lastYTSearch) {
-    await conn.reply(m.chat, '⏰ No hay búsqueda activa. Realiza una nueva búsqueda.', m);
-    return false;
-  }
-
-  console.log(`🎵 Procesando: ${user.lastYTSearch.title}`);
-
-  const currentTime = Date.now();
-  const searchTime = user.lastYTSearch.timestamp || 0;
-
-  if (currentTime - searchTime > 10 * 60 * 1000) {
-    await conn.reply(m.chat, '⏰ La búsqueda ha expirado. Por favor realiza una nueva búsqueda.', m);
-    return false; 
-  }
-
-  let option = null;
-  if (m.text.includes('audio_mp3')) {
-    option = 1; 
-  } else if (m.text.includes('video_mp4')) {
-    option = 2; 
-  } else if (m.text.includes('audio_doc')) {
-    option = 3; 
-  } else if (m.text.includes('video_doc')) {
-    option = 4; 
-  }
-
-  if (!option) {
-    return false;
-  }
-
-  user.monedaDeducted = false;
-
-  try {
-    await processDownload(
-      conn, 
-      m, 
-      user.lastYTSearch.url, 
-      user.lastYTSearch.title, 
-      option
-    );
-
-    user.lastYTSearch = null;
-
-  } catch (error) {
-    console.error(`❌ Error en descarga:`, error.message);
-    await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error.message}`, m);
-  }
-
-  return true;
+  return false;
 };
 
 handler.command = handler.help = ['play', 'ytdlv2'];
