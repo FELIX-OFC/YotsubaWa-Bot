@@ -12,14 +12,14 @@ async function getAudioFromApis(url) {
 
   for (const api of apis) {
     try {
-      console.log(`🔄 Trying API: ${api.api}`);
+      console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 API response:`, JSON.stringify(data, null, 2));
+      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
 
       const downloadUrl = api.extractor(data);
       if (downloadUrl && downloadUrl.startsWith('http')) {
-        console.log(`✅ API exitoso: ${api.api}, URL: ${downloadUrl}`);
+        console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
@@ -41,14 +41,14 @@ async function getVideoFromApis(url) {
 
   for (const api of apis) {
     try {
-      console.log(`🔄 Trying API: ${api.api}`);
+      console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 API response:`, JSON.stringify(data, null, 2));
+      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
 
       const downloadUrl = api.extractor(data);
       if (downloadUrl && downloadUrl.startsWith('http')) {
-        console.log(`✅ API exitoso: ${api.api}, URL: ${downloadUrl}`);
+        console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
@@ -98,7 +98,7 @@ function formatViews(views) {
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text.trim()) {
-      return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre de la música o URL de YouTube a descargar.\n\nEjemplo: \( {usedPrefix} \){command} Let you Down Cyberpunk`, m);
+      return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: \( {usedPrefix} \){command} Let you Down Cyberpunk`, m);
     }
 
     let videoInfo;
@@ -148,10 +148,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const canal = author.name || 'Desconocido';
 
     const buttons = [
-      ['🎵 Audio MP3', 'ytdlv2_audio_mp3'],
-      ['🎬 Video MP4', 'ytdlv2_video_mp4'],
-      ['📁 MP3 Documento', 'ytdlv2_audio_doc'],
-      ['📁 MP4 Documento', 'ytdlv2_video_doc']
+      ['🎵 Descargar Audio', 'ytdlv2_audio_mp3'],
+      ['🎬 Descargar Video', 'ytdlv2_video_mp4'],
+      ['📁 Audio como Documento', 'ytdlv2_audio_doc'],
+      ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
     const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
@@ -169,7 +169,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
 🌟 *Selecciona el formato para descargar:*`;
 
-    const footer = '🍀 Yotsuba Nakano Bot - YouTube';
+    const footer = '🍀 Yotsuba Nakano Bot - YouTube Downloader';
 
     try {
       const thumb = thumbnail ? (await conn.getFile(thumbnail))?.data : null;
@@ -189,7 +189,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
   } catch (error) {
     console.error("Error completo:", error);
-    return m.reply(`🍀 Ocurrió un error: ${error.message || 'Desconocido'}`);
+    return m.reply(`🍀 Ocurrió un error inesperado: ${error.message || 'Desconocido'}`);
   }
 };
 
@@ -202,7 +202,7 @@ async function processDownload(conn, m, url, title, option) {
   };
 
   const downloadType = downloadTypes[option] || 'archivo';
-  await conn.reply(m.chat, `🍀 Obteniendo ${downloadType}... 🌟`, m);
+  await conn.reply(m.chat, `🍀 Preparando ${downloadType}... 🌟`, m);
 
   try {
     const isVideo = option === 2 || option === 4;
@@ -215,7 +215,7 @@ async function processDownload(conn, m, url, title, option) {
       downloadUrl = await getAudioFromApis(url);
     }
 
-    console.log(`✅ API exitoso, URL: ${downloadUrl}`);
+    console.log(`✅ Descarga lista, URL: ${downloadUrl}`);
 
     let fileName = `${title.replace(/[^\w\s]/gi, '').substring(0, 50)}`;
 
@@ -266,7 +266,7 @@ async function processDownload(conn, m, url, title, option) {
     return true;
   } catch (error) {
     console.error("Error al procesar descarga:", error);
-    conn.reply(m.chat, `🍀 Error: ${error.message}`, m);
+    conn.reply(m.chat, `🍀 Error en la descarga: ${error.message}`, m);
     return false;
   }
 }
