@@ -1,74 +1,67 @@
-```javascript
 import fetch from "node-fetch";
 import yts from 'yt-search';
 
-const API_KEY = 'Duarte-zz12';
+const API_KEY = 'Duarte-zz12'; // deja como está si es tu key
 
 async function getAudioFromApis(url) {
-
-   const apis = [    
-    { api: 'AlyaBot Play', endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res.status ? res.data?.download : null },
-    { api: 'AlyaBot v2', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
-  ].filter(api => api.endpoint !== null); 
+  const apis = [
+    { api: 'AlyaBot Play', endpoint: `https://rest.alyabotpe.xyz/dl/youtubeplay?query=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.download || res.data?.dl || res.data?.url) : null },
+    { api: 'AlyaBot v2', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp3?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null }
+  ];
 
   for (const api of apis) {
     try {
       console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
-
+      console.log(`📊 Respuesta de API (${api.api}):`, JSON.stringify(data, null, 2));
       const downloadUrl = api.extractor(data);
-      if (downloadUrl && downloadUrl.startsWith('http')) {
+      if (downloadUrl && String(downloadUrl).startsWith('http')) {
         console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
       }
     } catch (error) {
-      console.log(`❌ API ${api.api} falló:`, error.message);
+      console.log(`❌ API ${api.api} falló:`, error?.message || error);
     }
   }
-
   throw new Error('No se pudo obtener el enlace de descarga de ninguna API de audio');
 }
 
 async function getVideoFromApis(url) {
-
-  const apis = [    
-    { api: 'AlyaBot Video', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
-    { api: 'API Causas', endpoint: `https://api-causas.duckdns.org/api/v1/descargas/youtube?url=${encodeURIComponent(url)}&type=video&apikey=causa-adc2c572476abdd8`, extractor: res => res.status ? res.data?.download?.url : null }
-  ].filter(api => api.endpoint !== null); 
+  const apis = [
+    { api: 'AlyaBot Video', endpoint: `https://rest.alyabotpe.xyz/dl/ytmp4?url=${encodeURIComponent(url)}&key=${API_KEY}`, extractor: res => res?.status ? (res.data?.dl || res.data?.url || res.data?.download) : null },
+    { api: 'API Causas', endpoint: `https://api-causas.duckdns.org/api/v1/descargas/youtube?url=${encodeURIComponent(url)}&type=video&apikey=causa-adc2c572476abdd8`, extractor: res => res?.status ? (res.data?.download?.url || res.data?.download) : null }
+  ];
 
   for (const api of apis) {
     try {
       console.log(`🔄 Intentando API: ${api.api}`);
       const response = await fetch(api.endpoint);
       const data = await response.json();
-      console.log(`📊 Respuesta de API:`, JSON.stringify(data, null, 2));
-
+      console.log(`📊 Respuesta de API (${api.api}):`, JSON.stringify(data, null, 2));
       const downloadUrl = api.extractor(data);
-      if (downloadUrl && downloadUrl.startsWith('http')) {
+      if (downloadUrl && String(downloadUrl).startsWith('http')) {
         console.log(`✅ API exitosa: ${api.api}, URL: ${downloadUrl}`);
         return downloadUrl;
       } else {
         console.log(`❌ No se encontró URL válida en ${api.api}`);
       }
     } catch (error) {
-      console.log(`❌ API ${api.api} falló:`, error.message);
+      console.log(`❌ API ${api.api} falló:`, error?.message || error);
     }
   }
-
   throw new Error('No se pudo obtener el enlace de descarga de ninguna API de video');
 }
 
 function extractYouTubeId(url) {
+  if (!url) return null;
   const patterns = [
     /youtu\.be\/([a-zA-Z0-9\-\_]{11})/,
     /youtube\.com\/watch\?v=([a-zA-Z0-9\-\_]{11})/,
     /youtube\.com\/shorts\/([a-zA-Z0-9\-\_]{11})/
   ];
-
   for (const pattern of patterns) {
     const match = url.match(pattern);
     if (match) return match[1];
@@ -77,76 +70,76 @@ function extractYouTubeId(url) {
 }
 
 function formatViews(views) {
-  if (views === undefined || views === null) {
-    return "No disponible";
-  }
-
+  if (views === undefined || views === null) return "No disponible";
   try {
-    const numViews = parseInt(views);
-    if (numViews >= 1_000_000_000) {
-      return `${(numViews / 1_000_000_000).toFixed(1)}B`;
-    } else if (numViews >= 1_000_000) {
-      return `${(numViews / 1_000_000).toFixed(1)}M`;
-    } else if (numViews >= 1_000) {
-      return `${(numViews / 1_000).toFixed(1)}k`;
-    }
+    const numViews = parseInt(views) || 0;
+    if (numViews >= 1_000_000_000) return `${(numViews / 1_000_000_000).toFixed(1)}B`;
+    if (numViews >= 1_000_000) return `${(numViews / 1_000_000).toFixed(1)}M`;
+    if (numViews >= 1_000) return `${(numViews / 1_000).toFixed(1)}k`;
     return numViews.toLocaleString();
-  } catch (e) {
+  } catch {
     return String(views);
   }
 }
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
+const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) => {
   try {
-    if (!text.trim()) {
+    text = (text || '').trim();
+    if (!text) {
       return conn.reply(m.chat, `🍀YOTSUBA NAKANO🍀\n\n🍀 Ingresa el nombre del video o canción de YouTube que deseas descargar.\n\nEjemplo: ${usedPrefix}${command} Let you Down Cyberpunk`, m);
     }
 
-    let videoInfo;
+    let videoInfo = null;
     let url = '';
 
+    // Si parece una url de youtube, usa la URL directamente
+    const isYouTubeUrl = /youtube\.com|youtu\.be/i.test(text);
 
-    if (text.includes('youtube.com') || text.includes('youtu.be')) {
+    if (isYouTubeUrl) {
       url = text;
-      const videoId = extractYouTubeId(url);
-      if (!videoId) {
-        return m.reply('URL de YouTube inválida');
+      // yts acepta url o texto, intentamos con la url
+      const search = await yts(url);
+      // Priorizar videos array
+      if (search) {
+        videoInfo = (search.videos && search.videos.find(v => v.url && v.url.includes(extractYouTubeId(url) || ''))) || (search.all && search.all.find(v => v.videoId && url.includes(v.videoId))) || (search.videos && search.videos[0]) || (search.all && search.all[0]) || null;
       }
-
-
-      const search = await yts(videoId);
-      if (search.all && search.all.length > 0) {
-        videoInfo = search.all.find(v => v.videoId === videoId);
+      // Si no lo encontró, intentar buscar por id
+      if (!videoInfo) {
+        const id = extractYouTubeId(url);
+        if (id) {
+          const search2 = await yts(id);
+          videoInfo = (search2.videos && search2.videos[0]) || (search2.all && search2.all.find(v => v.videoId === id)) || null;
+        }
       }
     } else {
-
+      // Búsqueda por texto
       const search = await yts(text);
-      if (!search.all || search.all.length === 0) {
-        return m.reply('No se encontraron resultados para tu búsqueda.');
+      if (!search || ((!search.videos || search.videos.length === 0) && (!search.all || search.all.length === 0))) {
+        return conn.reply(m.chat, 'No se encontraron resultados para tu búsqueda.', m);
       }
-      videoInfo = search.all[0];
-      url = videoInfo.url;
+      // Prefer videos list
+      videoInfo = (search.videos && search.videos[0]) || (search.all && search.all[0]);
+      url = videoInfo?.url || url;
     }
 
     if (!videoInfo) {
-      return m.reply('No se pudo obtener información del video.');
+      return conn.reply(m.chat, 'No se pudo obtener información del video.', m);
     }
 
-    const {
-      title = 'Desconocido', 
-      thumbnail = '', 
-      timestamp = 'Desconocido', 
-      views = 0, 
-      ago = 'Desconocido', 
-      author = { name: 'Desconocido' } 
-    } = videoInfo;
+    // Normalizar campos
+    const title = videoInfo.title || 'Desconocido';
+    const thumbnail = videoInfo.thumbnail || videoInfo.image || '';
+    const timestamp = videoInfo.timestamp || videoInfo.duration || 'Desconocido';
+    const views = videoInfo.views ?? videoInfo.viewCount ?? 0;
+    const ago = videoInfo.ago || videoInfo.uploaded || 'Desconocido';
+    const author = (videoInfo.author && videoInfo.author.name) ? videoInfo.author.name : (videoInfo.author || 'Desconocido');
 
     if (!url) {
-      return m.reply('No se pudo obtener la URL del video.');
+      return conn.reply(m.chat, 'No se pudo obtener la URL del video.', m);
     }
 
     const vistas = formatViews(views);
-    const canal = author.name || 'Desconocido';
+    const canal = author || 'Desconocido';
 
     const buttons = [
       ['🎵 Descargar Audio', 'ytdlv2_audio_mp3'],
@@ -158,106 +151,126 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
 
 > 🍀 *Título:* ${title}
-*°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
 > 🌟 *Duración:* ${timestamp}
-*°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
 > 🍀 *Vistas:* ${vistas}
-*°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
 > 🌟 *Canal:* ${canal}
-*°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°*
 > 🍀 *Publicado:* ${ago}
-*⏝ּׅ︣︢ۛ۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣︢ۛ۫۫۫۫۫ۜ⏝ּׅ︣ׄۛ۫۫۫۫۫ۜ*
 
 🌟 *Selecciona el formato para descargar:*`;
 
     const footer = '🍀 Yotsuba Bot - Descargador de YouTube';
 
+    // Enviar carousel (si la función existe en tu conn). Si falla, enviamos texto con botones simples.
     try {
-      const thumb = thumbnail ? (await conn.getFile(thumbnail))?.data : null;
-      await conn.sendNCarousel(m.chat, infoText, footer, thumb, buttons, null, null, null, m);
+      let thumb = null;
+      if (thumbnail) {
+        try {
+          const file = await conn.getFile(thumbnail).catch(() => null);
+          thumb = file?.data || null;
+        } catch (e) {
+          thumb = null;
+        }
+      }
+      // sendNCarousel puede ser una función personalizada; mantenla si la usas
+      if (typeof conn.sendNCarousel === 'function') {
+        await conn.sendNCarousel(m.chat, infoText, footer, thumb, buttons, null, null, null, m);
+      } else {
+        // fallback: enviar texto y botones como reply
+        const btnsForReply = buttons.map(b => ({ buttonId: b[1], buttonText: { displayText: b[0] }, type: 1 }));
+        await conn.sendMessage(m.chat, { text: infoText + '\n\n' + footer, buttons: btnsForReply, headerType: 1 }, { quoted: m });
+      }
     } catch (thumbError) {
-      await conn.sendNCarousel(m.chat, infoText, footer, null, buttons, null, null, null, m);
-      console.error("Error al obtener la miniatura:", thumbError);
+      console.error("Error al enviar carousel/miniatura:", thumbError);
+      const btnsForReply = buttons.map(b => ({ buttonId: b[1], buttonText: { displayText: b[0] }, type: 1 }));
+      await conn.sendMessage(m.chat, { text: infoText + '\n\n' + footer, buttons: btnsForReply, headerType: 1 }, { quoted: m });
     }
 
-    const usr = global.getUser ? global.getUser(m.sender) : (global.db.data.users[m.sender] = global.db.data.users[m.sender] || {})
+    // Guardar búsqueda en la DB del usuario (asegurar estructura)
+    if (!global.db) global.db = { data: { users: {} } };
+    if (!global.db.data) global.db.data = { users: {} };
+    if (!global.db.data.users) global.db.data.users = {};
+    if (!global.db.data.users[m.sender]) global.db.data.users[m.sender] = {};
+    const usr = global.db.data.users[m.sender];
     usr.lastYTSearch = {
       url,
       title,
-      messageId: m.key.id,
+      messageId: m.key?.id || null,
       timestamp: Date.now()
     };
 
+    return;
   } catch (error) {
     console.error("Error completo:", error);
-    return m.reply(`🍀 Ocurrió un error inesperado: ${error.message || 'Desconocido'}`);
+    return conn.reply(m.chat, `🍀 Ocurrió un error inesperado: ${error?.message || 'Desconocido'}`, m);
   }
 };
 
 async function processDownload(conn, m, url, title, option) {
   const downloadTypes = {
     1: '🎵 audio MP3',
-    2: '🎬 video MP4', 
+    2: '🎬 video MP4',
     3: '📁 audio MP3 doc',
     4: '📁 video MP4 doc'
   };
-
   const downloadType = downloadTypes[option] || 'archivo';
   await conn.reply(m.chat, `🍀 Preparando ${downloadType}... 🌟`, m);
 
   try {
     const isVideo = option === 2 || option === 4;
-
     let downloadUrl;
-
     if (isVideo) {
       downloadUrl = await getVideoFromApis(url);
     } else {
       downloadUrl = await getAudioFromApis(url);
     }
+    if (!downloadUrl) throw new Error('No se obtuvo URL de descarga');
 
     console.log(`✅ Descarga lista, URL: ${downloadUrl}`);
 
-    let fileName = `${title.replace(/[^\w\s]/gi, '').substring(0, 50)}`;
+    // Sanea el nombre
+    let safeName = (title || 'yotsuba_file').replace(/[\/\\<>:"|?*\x00-\x1F]/g, '').trim();
+    if (!safeName) safeName = 'yotsuba_file';
+    safeName = safeName.substring(0, 60);
 
     if (option === 1 || option === 3) {
-      fileName += '.mp3';
-
+      const fileName = `${safeName}.mp3`;
       if (option === 1) {
         await conn.sendMessage(m.chat, {
           audio: { url: downloadUrl },
           mimetype: 'audio/mpeg',
-          fileName: fileName,
+          fileName,
           ptt: false
         }, { quoted: m });
       } else {
         await conn.sendMessage(m.chat, {
           document: { url: downloadUrl },
           mimetype: 'audio/mpeg',
-          fileName: fileName
+          fileName
         }, { quoted: m });
       }
     } else {
-      fileName += '.mp4';
-
+      const fileName = `${safeName}.mp4`;
       if (option === 2) {
         await conn.sendMessage(m.chat, {
           video: { url: downloadUrl },
           mimetype: 'video/mp4',
-          fileName: fileName,
+          fileName,
           caption: `🎬 ${title}`
         }, { quoted: m });
       } else {
         await conn.sendMessage(m.chat, {
           document: { url: downloadUrl },
           mimetype: 'video/mp4',
-          fileName: fileName,
+          fileName,
           caption: `📁 ${title}`
         }, { quoted: m });
       }
     }
 
-    const user = global.getUser ? global.getUser(m.sender) : global.db.data.users[m.sender];
+    // Aplicar coste si procede
+    if (!global.db) global.db = { data: { users: {} } };
+    if (!global.db.data.users) global.db.data.users = {};
+    const user = global.getUser ? global.getUser(m.sender) : (global.db.data.users[m.sender] || (global.db.data.users[m.sender] = {}));
     if (user && !user.monedaDeducted) {
       user.moneda = (user.moneda || 0) - 2;
       user.monedaDeducted = true;
@@ -267,14 +280,21 @@ async function processDownload(conn, m, url, title, option) {
     return true;
   } catch (error) {
     console.error("Error al procesar descarga:", error);
-    conn.reply(m.chat, `🍀 Error en la descarga: ${error.message}`, m);
+    try { await conn.reply(m.chat, `🍀 Error en la descarga: ${error?.message || error}`, m); } catch {}
     return false;
   }
 }
 
 handler.before = async (m, { conn }) => {
-  if (m.message?.buttonsResponseMessage) {
-    const selectedId = m.message.buttonsResponseMessage.selectedButtonId;
+  try {
+    // botón de respuesta (varía según versión de baileys/lib)
+    const br = m.message?.buttonsResponseMessage || m.message?.listResponseMessage || null;
+    if (!br) return false;
+
+    // en buttonsResponseMessage el id está en selectedButtonId
+    const selectedId = br?.selectedButtonId || br?.selectedId || br?.singleSelectReply?.selectedRowId;
+    if (!selectedId) return false;
+
     const buttonPatterns = {
       'ytdlv2_audio_mp3': 1,
       'ytdlv2_video_mp4': 2,
@@ -285,7 +305,7 @@ handler.before = async (m, { conn }) => {
     const option = buttonPatterns[selectedId];
     if (!option) return false;
 
-    const user = global.db.data.users[m.sender];
+    const user = global.db?.data?.users?.[m.sender];
     if (!user || !user.lastYTSearch) {
       await conn.reply(m.chat, '⏰ No hay búsqueda activa. Realiza una nueva búsqueda.', m);
       return false;
@@ -295,34 +315,26 @@ handler.before = async (m, { conn }) => {
 
     const currentTime = Date.now();
     const searchTime = user.lastYTSearch.timestamp || 0;
-
     if (currentTime - searchTime > 10 * 60 * 1000) {
       await conn.reply(m.chat, '⏰ La búsqueda ha expirado. Por favor realiza una nueva búsqueda.', m);
-      return false; 
+      user.lastYTSearch = null;
+      return false;
     }
 
     user.monedaDeducted = false;
 
     try {
-      await processDownload(
-        conn, 
-        m, 
-        user.lastYTSearch.url, 
-        user.lastYTSearch.title, 
-        option
-      );
-
+      await processDownload(conn, m, user.lastYTSearch.url, user.lastYTSearch.title, option);
       user.lastYTSearch = null;
-
     } catch (error) {
-      console.error(`❌ Error en descarga:`, error.message);
-      await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error.message}`, m);
+      console.error(`❌ Error en descarga:`, error?.message || error);
+      await conn.reply(m.chat, `🍀 Error al procesar la descarga: ${error?.message || error}`, m);
     }
-
     return true;
+  } catch (e) {
+    console.error('Error en handler.before:', e);
+    return false;
   }
-
-  return false;
 };
 
 handler.command = handler.help = ['play', 'ytdlv2'];
@@ -330,4 +342,3 @@ handler.tags = ['downloader'];
 handler.register = true;
 
 export default handler;
-```
