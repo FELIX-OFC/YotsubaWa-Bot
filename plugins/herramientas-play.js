@@ -148,7 +148,7 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
       ['📁 Video como Documento', 'ytdlv2_video_doc']
     ];
 
-    const infoText = `*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ🍀𝗬𝗼𝘁𝘀𝘂𝗯𝗮🍀ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
+    const infoText = `*╭ִ╼࣪━ִ👑𝗬𝗼𝘁𝘀𝘂𝗯𝗮━ִ╾࣪╮*
 
 > 👑 *Título:* ${title}
 > 🌟 *Duración:* ${timestamp}
@@ -156,7 +156,7 @@ const handler = async (m, { conn, text = '', usedPrefix = '', command = '' }) =>
 > 🌟 *Canal:* ${canal}
 > 👑 *Publicado:* ${ago}
 
-🌟 *Selecciona el formato para descargar:*`;
+🌟 *Por favor seleccione el formato para descargar:*`;
 
     const footer = '👑 Yotsuba Bot - Descargador de YouTube';
 
@@ -274,7 +274,7 @@ async function processDownload(conn, m, url, title, option) {
     if (user && !user.monedaDeducted) {
       user.moneda = (user.moneda || 0) - 2;
       user.monedaDeducted = true;
-      conn.reply(m.chat, `🍀 Has realizado con exito *hola 🌟*`, m);
+      conn.reply(m.chat, `⚡ Tú busca se a realizado con exito *Yotsuba Nakano bot🌟*`, m);
     }
 
     return true;
